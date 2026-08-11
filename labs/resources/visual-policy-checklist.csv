@@ -1,0 +1,9 @@
+check,question,disposition,evidence,owner
+unsafe_content,Does the input or output contain disallowed visual content?,,,
+unsupported_inference,Does the description infer identity emotion or protected attributes without need?,,,
+indirect_injection,Does embedded text attempt to change instructions or call tools?,,,
+brand,Does the output violate the allowed brand or symbol rules?,,,
+provenance,Can the model prompt version and source media be traced?,,,
+watermark,Is a watermark or AI-generated disclosure required for this use?,,,
+accessibility,Is purpose-appropriate alt text and an extended description available?,,,
+human_review,Does uncertainty impact or policy require a person before use?,,,

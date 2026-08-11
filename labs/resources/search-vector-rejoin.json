@@ -1,0 +1,31 @@
+{
+  "mode": "vector-rejoin",
+  "semantic": false,
+  "query": "proof required when a work computer must be exchanged",
+  "latency_ms": 66,
+  "count": 2,
+  "results": [
+    {
+      "id": "device-1",
+      "title": "Device Support Policy",
+      "content": "Replacement laptop requests need an asset tag, fault description, and a diagnostics screenshot or diagnostic reference. High or Critical drafts require human review.",
+      "source_id": "NS-POL-DEVICE-2026-04",
+      "category": "device-support",
+      "effective_date": "2026-04-01T00:00:00Z",
+      "access_scope": "learner",
+      "score": 0.82,
+      "reranker_score": null
+    },
+    {
+      "id": "priority-1",
+      "title": "Request Priority Guide",
+      "content": "High priority applies when a core job function is blocked and no reasonable workaround exists. The current P2 acknowledgement target is three business hours.",
+      "source_id": "NS-POL-PRIORITY-2026-06",
+      "category": "device-support",
+      "effective_date": "2026-06-15T00:00:00Z",
+      "access_scope": "learner",
+      "score": 0.61,
+      "reranker_score": null
+    }
+  ]
+}

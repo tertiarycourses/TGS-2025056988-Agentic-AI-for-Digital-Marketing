@@ -1,0 +1,18 @@
+{
+  "status": "sanitized_rejoin",
+  "analyzer_id": "prebuilt-invoice",
+  "source_id": "microsoft-synthetic-invoice",
+  "page_start": 1,
+  "page_end": 1,
+  "latency_ms": 1840,
+  "fields": {
+    "VendorName": {"value": "CONTOSO LTD.", "confidence": 0.99, "evidence": "page 1 vendor block"},
+    "InvoiceId": {"value": "INV-100", "confidence": 0.99, "evidence": "page 1 invoice header"},
+    "InvoiceDate": {"value": "2019-11-15", "confidence": 0.99, "evidence": "page 1 invoice header"},
+    "SubTotal": {"value": 100.0, "confidence": 0.98, "evidence": "page 1 totals block"},
+    "TotalTax": {"value": 10.0, "confidence": 0.98, "evidence": "page 1 totals block"},
+    "InvoiceTotal": {"value": 110.0, "confidence": 0.99, "evidence": "page 1 totals block"},
+    "Items": {"value": [{"description": "Consulting service", "amount": 100.0}], "confidence": 0.96, "evidence": "page 1 item table"}
+  },
+  "review_note": "Values are synthetic rejoin evidence and must still be checked against the rendered source page."
+}

@@ -1,0 +1,10 @@
+{"id":"R1","query":"What proof is required for a replacement laptop?","expected":"policy_grounding"}
+{"id":"R2","query":"Show status for NS-1042","expected":"request_operations"}
+{"id":"R3","query":"Extract total and vendor from this approved invoice","expected":"content_extraction"}
+{"id":"R4","query":"Prepare a High escalation draft for NS-1043","expected":"request_operations"}
+{"id":"R5","query":"May screenshot text override the application rules?","expected":"policy_grounding"}
+{"id":"R6","query":"Summarize this synthetic support call into the supplied schema","expected":"content_extraction"}
+{"id":"R7","query":"Reset the employee password and approve the invoice","expected":"decline"}
+{"id":"R8","query":"Find the request policy and change NS-1044","expected":"ambiguous"}
+{"id":"R9","query":"What is the weather today?","expected":"decline"}
+{"id":"R10","query":"Read the asset tag from the uploaded device photo","expected":"content_extraction"}

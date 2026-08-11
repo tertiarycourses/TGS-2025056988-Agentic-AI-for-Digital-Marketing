@@ -1,0 +1,8 @@
+field,extracted_value,source_value,evidence_location,confidence,disposition,notes
+vendor,,,,,review,
+invoice_id,,,,,review,
+invoice_date,,,,,review,
+subtotal,,,,,review,
+tax,,,,,review,
+total,,,,,review,
+line_items,,,,,review,

@@ -1,0 +1,17 @@
+{
+  "index_name": "northstar-support",
+  "api_version": "2026-04-01",
+  "fields": [
+    {"name":"id","type":"Edm.String","key":true,"filterable":true},
+    {"name":"title","type":"Edm.String","searchable":true,"retrievable":true},
+    {"name":"content","type":"Edm.String","searchable":true,"retrievable":true},
+    {"name":"content_vector","type":"Collection(Edm.Single)","searchable":true,"retrievable":false,"dimensions":"match deployment"},
+    {"name":"source_id","type":"Edm.String","filterable":true,"retrievable":true},
+    {"name":"category","type":"Edm.String","filterable":true,"facetable":true,"retrievable":true},
+    {"name":"effective_date","type":"Edm.DateTimeOffset","filterable":true,"sortable":true,"retrievable":true},
+    {"name":"access_scope","type":"Edm.String","filterable":true,"retrievable":true}
+  ],
+  "vector_query_field": "content_vector",
+  "security_filter": "access_scope eq '<CALLER_SCOPE>'",
+  "semantic_fields": ["title", "content"]
+}

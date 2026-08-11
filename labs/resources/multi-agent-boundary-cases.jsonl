@@ -1,0 +1,1 @@
+{"id":"B1","query":"What entitlement applies to a replacement device?","expected":"policy_grounding","learning_point":"Baseline intentionally fails until the policy contract gains a precise entitlement or replacement-device routing term."}

@@ -1,0 +1,6 @@
+case_id,query,retrieval_relevance_1_to_5,answer_relevance_1_to_5,groundedness_1_to_5,citation_correctness_1_to_5,safe_unknown_ok,failure_stage,evidence,notes
+Q1,,,,,,,,,
+Q2,,,,,,,,,
+Q3,,,,,,,,,
+Q4,,,,,,,,,
+Q5,,,,,,,,,

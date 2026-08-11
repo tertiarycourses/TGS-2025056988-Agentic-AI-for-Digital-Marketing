@@ -1,0 +1,20 @@
+{
+  "mode": "keyword-rejoin",
+  "semantic": false,
+  "query": "replacement laptop evidence",
+  "latency_ms": 41,
+  "count": 1,
+  "results": [
+    {
+      "id": "device-1",
+      "title": "Device Support Policy",
+      "content": "Replacement laptop requests need an asset tag, fault description, and a diagnostics screenshot or diagnostic reference. High or Critical drafts require human review.",
+      "source_id": "NS-POL-DEVICE-2026-04",
+      "category": "device-support",
+      "effective_date": "2026-04-01T00:00:00Z",
+      "access_scope": "learner",
+      "score": 3.7,
+      "reranker_score": null
+    }
+  ]
+}

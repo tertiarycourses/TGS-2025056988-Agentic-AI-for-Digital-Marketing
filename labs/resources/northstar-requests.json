@@ -1,0 +1,5 @@
+[
+  {"record_id":"NS-1042","status":"Open","category":"Device","priority":"Normal","summary":"Laptop does not start after an update","asset_tag":"NST-LT-2042"},
+  {"record_id":"NS-1043","status":"WaitingForUser","category":"Access","priority":"High","summary":"Synthetic training account cannot access the reporting sandbox","asset_tag":null},
+  {"record_id":"NS-1044","status":"Resolved","category":"Application","priority":"Low","summary":"PDF viewer association restored","asset_tag":"NST-LT-1988"}
+]

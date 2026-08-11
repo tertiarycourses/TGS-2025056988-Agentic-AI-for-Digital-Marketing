@@ -1,0 +1,24 @@
+{
+  "status": "sanitized_rejoin",
+  "project_endpoint_shape": "https://<resource>.services.ai.azure.com/api/projects/<project>",
+  "deployment": {
+    "name": "northstar-chat",
+    "model_family": "approved-language-model",
+    "region": "instructor-confirmed",
+    "capacity": "cohort-ready"
+  },
+  "response": {
+    "id": "resp_sanitized_001",
+    "text_present": true
+  },
+  "operations": {
+    "authentication": "Microsoft Entra ID",
+    "learner_role": "Foundry User",
+    "project_scope": "instructor-provided Foundry project",
+    "trace_status": "visible after propagation delay",
+    "latency_ms": 842,
+    "input_tokens": 38,
+    "output_tokens": 31
+  },
+  "secrets_removed": true
+}
