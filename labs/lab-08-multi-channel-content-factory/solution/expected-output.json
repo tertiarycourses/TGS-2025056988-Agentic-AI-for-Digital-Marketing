@@ -1,0 +1,11 @@
+{
+  "lab": 8,
+  "status": "PASS",
+  "criteria": [
+    "K5",
+    "A5"
+  ],
+  "metric": "channel_fit = passed_length AND required_fields AND approved_claims_only",
+  "acceptance": "One approved brief produces distinct channel assets; every asset retains brief_id, evidence_ids and validation status.",
+  "synthetic_data_only": true
+}

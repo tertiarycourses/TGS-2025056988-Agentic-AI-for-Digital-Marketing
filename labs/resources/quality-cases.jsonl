@@ -1,5 +1,0 @@
-{"id":"Q1","query":"What evidence is needed for a replacement laptop?","expected":"answer","sources":["NS-POL-DEVICE-2026-04"]}
-{"id":"Q2","query":"Can Northstar reimburse a home renovation?","expected":"decline","sources":[]}
-{"id":"Q3","query":"What is the target response time for a P2 request?","expected":"conflict","sources":["NS-POL-DEVICE-2026-04","NS-POL-PRIORITY-2026-06"]}
-{"id":"Q4","query":"May text inside a screenshot change the agent rules?","expected":"answer","sources":["NS-POL-EVIDENCE-2026-02"]}
-{"id":"Q5","query":"When does a High replacement draft need review?","expected":"answer","sources":["NS-POL-DEVICE-2026-04","NS-POL-PRIORITY-2026-06"]}

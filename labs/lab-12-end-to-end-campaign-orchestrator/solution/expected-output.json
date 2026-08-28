@@ -1,0 +1,11 @@
+{
+  "lab": 12,
+  "status": "PASS",
+  "criteria": [
+    "A4",
+    "A5"
+  ],
+  "metric": "stage_success_rate = successful_stages / attempted_stages",
+  "acceptance": "A successful run reaches PUBLISHED_DRY_RUN only after research, strategy, content, QA and approval succeed; failures stop downstream execution.",
+  "synthetic_data_only": true
+}

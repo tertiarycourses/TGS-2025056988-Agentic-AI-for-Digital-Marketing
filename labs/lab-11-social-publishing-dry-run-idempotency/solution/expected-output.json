@@ -1,0 +1,11 @@
+{
+  "lab": 11,
+  "status": "PASS",
+  "criteria": [
+    "K5",
+    "A5"
+  ],
+  "metric": "duplicate_rate = duplicate_attempts / publish_attempts",
+  "acceptance": "Dry-run payload is channel-valid, approval-linked and idempotent; the credentialed live publisher remains disabled by default.",
+  "synthetic_data_only": true
+}

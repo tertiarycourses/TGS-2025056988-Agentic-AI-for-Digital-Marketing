@@ -1,0 +1,184 @@
+{
+  "name": "TGS-2025056988 Lab 02 - Evidence Research & Source Scoring",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "n02-01",
+      "name": "Manual Trigger",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        240,
+        220
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "return [{\"json\": {\"source_id\": \"SRC-001\", \"publisher\": \"IMDA\", \"url\": \"https://www.imda.gov.sg/\", \"published_date\": \"2026-07-15\", \"claim\": \"SMEs prioritise measurable digital growth\", \"relevance\": 0.88, \"reliability\": 0.95, \"recency\": 0.92}}, {\"json\": {\"source_id\": \"SRC-002\", \"publisher\": \"Industry Blog\", \"url\": \"https://example.org/market\", \"published_date\": \"2025-11-10\", \"claim\": \"Short video drives awareness\", \"relevance\": 0.72, \"reliability\": 0.55, \"recency\": 0.6}}];"
+      },
+      "id": "n02-02",
+      "name": "Research Inputs",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 1,
+      "position": [
+        500,
+        220
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "for (const x of items) { const j=x.json; j.evidence_score=+(j.relevance*j.reliability*j.recency).toFixed(3); j.accepted=j.evidence_score>=0.60; j.rejection_reason=j.accepted?'':'Below 0.60 evidence threshold'; } return items;"
+      },
+      "id": "n02-03",
+      "name": "Normalise Evidence",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 1,
+      "position": [
+        760,
+        220
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "n02-04",
+      "name": "Score Sources",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        1020,
+        220
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "n02-05",
+      "name": "Confidence Gate",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        240,
+        410
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "n02-06",
+      "name": "Accepted Evidence",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        500,
+        410
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "n02-07",
+      "name": "Research Queue",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        760,
+        410
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Lab 2: Evidence Research & Source Scoring\n\n**Input:** data/research_sources.xlsx\n\n**Metric:** evidence_score = relevance × reliability × recency\n\n**Risk:** Low-quality sources can contaminate every downstream asset\n\nDRY RUN: credentialed publishing stays disabled until a trainer authorises live credentials.",
+        "height": 150,
+        "width": 900
+      },
+      "id": "note-02",
+      "name": "Lab Contract",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        240,
+        20
+      ]
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Manual Trigger": {
+      "main": [
+        [
+          {
+            "node": "Research Inputs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Research Inputs": {
+      "main": [
+        [
+          {
+            "node": "Normalise Evidence",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Normalise Evidence": {
+      "main": [
+        [
+          {
+            "node": "Score Sources",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Score Sources": {
+      "main": [
+        [
+          {
+            "node": "Confidence Gate",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Confidence Gate": {
+      "main": [
+        [
+          {
+            "node": "Accepted Evidence",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Accepted Evidence": {
+      "main": [
+        [
+          {
+            "node": "Research Queue",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "saveManualExecutions": true
+  },
+  "versionId": "eae9ad455afaf886848a05b10850fbdd",
+  "meta": {
+    "templateCredsSetupCompleted": false
+  },
+  "tags": [
+    "TGS-2025056988",
+    "digital-marketing",
+    "human-oversight"
+  ]
+}

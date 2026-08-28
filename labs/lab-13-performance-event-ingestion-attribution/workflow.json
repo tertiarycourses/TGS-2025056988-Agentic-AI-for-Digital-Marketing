@@ -1,0 +1,206 @@
+{
+  "name": "TGS-2025056988 Lab 13 - Performance Event Ingestion & Attribution",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "n13-01",
+      "name": "Manual Trigger",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        240,
+        220
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "return [{\"json\": {\"event_id\": \"EVT-001\", \"campaign_id\": \"CMP-NS-001\", \"asset_id\": \"AST-002\", \"channel\": \"linkedin\", \"event\": \"click\", \"event_time\": \"2026-09-11T10:00:00+08:00\", \"value_sgd\": 0, \"cost_sgd\": 18.5, \"source\": \"mock-api\"}}, {\"json\": {\"event_id\": \"EVT-002\", \"campaign_id\": \"CMP-NS-001\", \"asset_id\": \"AST-001\", \"channel\": \"website\", \"event\": \"qualified_lead\", \"event_time\": \"2026-09-11T10:04:00+08:00\", \"value_sgd\": 0, \"cost_sgd\": 0, \"source\": \"mock-crm\"}}];"
+      },
+      "id": "n13-02",
+      "name": "Mock Channel Events",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 1,
+      "position": [
+        500,
+        220
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const seen=new Set(); return items.map(x=>{x.json.valid=Boolean(x.json.event_id&&x.json.campaign_id&&x.json.event_time); x.json.duplicate=seen.has(x.json.event_id); seen.add(x.json.event_id); return x;}).filter(x=>!x.json.duplicate);"
+      },
+      "id": "n13-03",
+      "name": "Normalise Schema",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 1,
+      "position": [
+        760,
+        220
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "n13-04",
+      "name": "Deduplicate Event IDs",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        1020,
+        220
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "n13-05",
+      "name": "Join Campaign Map",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        240,
+        410
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "n13-06",
+      "name": "Attribution Rules",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        500,
+        410
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "n13-07",
+      "name": "Performance Facts",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        760,
+        410
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "n13-08",
+      "name": "Quarantine",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        1020,
+        410
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Lab 13: Performance Event Ingestion & Attribution\n\n**Input:** data/performance_events.xlsx\n\n**Metric:** data_quality = valid_unique_events / received_events\n\n**Risk:** Inconsistent IDs and time zones can misattribute outcomes\n\nDRY RUN: credentialed publishing stays disabled until a trainer authorises live credentials.",
+        "height": 150,
+        "width": 900
+      },
+      "id": "note-13",
+      "name": "Lab Contract",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        240,
+        20
+      ]
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Manual Trigger": {
+      "main": [
+        [
+          {
+            "node": "Mock Channel Events",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Mock Channel Events": {
+      "main": [
+        [
+          {
+            "node": "Normalise Schema",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Normalise Schema": {
+      "main": [
+        [
+          {
+            "node": "Deduplicate Event IDs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Deduplicate Event IDs": {
+      "main": [
+        [
+          {
+            "node": "Join Campaign Map",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Join Campaign Map": {
+      "main": [
+        [
+          {
+            "node": "Attribution Rules",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Attribution Rules": {
+      "main": [
+        [
+          {
+            "node": "Performance Facts",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Performance Facts": {
+      "main": [
+        [
+          {
+            "node": "Quarantine",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "saveManualExecutions": true
+  },
+  "versionId": "5cc4d3578aaf2dc1a78182875f410673",
+  "meta": {
+    "templateCredsSetupCompleted": false
+  },
+  "tags": [
+    "TGS-2025056988",
+    "digital-marketing",
+    "human-oversight"
+  ]
+}

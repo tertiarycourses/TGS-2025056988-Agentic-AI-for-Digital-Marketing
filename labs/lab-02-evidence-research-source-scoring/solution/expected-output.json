@@ -1,0 +1,10 @@
+{
+  "lab": 2,
+  "status": "PASS",
+  "criteria": [
+    "K2"
+  ],
+  "metric": "evidence_score = relevance \u00d7 reliability \u00d7 recency",
+  "acceptance": "Every accepted claim retains source_id, URL, published date and evidence_score; no rejected row reaches synthesis.",
+  "synthetic_data_only": true
+}

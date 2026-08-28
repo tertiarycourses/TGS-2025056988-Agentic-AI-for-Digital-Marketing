@@ -1,0 +1,12 @@
+{
+  "lab": 14,
+  "status": "PASS",
+  "criteria": [
+    "K2",
+    "K4",
+    "A3"
+  ],
+  "metric": "ROI = (revenue\u00d7gross_margin\u2212spend)/spend; lift = (current\u2212baseline)/baseline",
+  "acceptance": "Dashboard metrics match the formulas; anomalies include volume, baseline, guardrail status and analyst decision.",
+  "synthetic_data_only": true
+}

@@ -1,0 +1,184 @@
+{
+  "name": "TGS-2025056988 Lab 06 - Campaign Backlog & Experiment Design",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "n06-01",
+      "name": "Manual Trigger",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        240,
+        220
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "return [{\"json\": {\"item_id\": \"EXP-001\", \"stage\": \"ACT\", \"hypothesis\": \"ROI diagnostic proof increases demo intent\", \"primary_metric\": \"landing_page_cv\", \"minimum_sample\": 2000, \"stop_rule\": \"Stop if complaint rate > 0.5%\", \"owner\": \"Ben\", \"status\": \"ready\"}}];"
+      },
+      "id": "n06-02",
+      "name": "Strategy Decisions",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 1,
+      "position": [
+        500,
+        220
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "for (const x of items) { x.json.processed=true; x.json.processed_at=new Date().toISOString(); } return items;"
+      },
+      "id": "n06-03",
+      "name": "Create Work Items",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 1,
+      "position": [
+        760,
+        220
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "n06-04",
+      "name": "Validate Experiment",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        1020,
+        220
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "n06-05",
+      "name": "Prioritise Backlog",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        240,
+        410
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "n06-06",
+      "name": "Owner Review",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        500,
+        410
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "n06-07",
+      "name": "Approved Backlog",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        760,
+        410
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Lab 6: Campaign Backlog & Experiment Design\n\n**Input:** data/campaign_backlog.xlsx\n\n**Metric:** priority = expected_impact × confidence / effort\n\n**Risk:** Automated testing without stop rules can expose audiences to harmful variants\n\nDRY RUN: credentialed publishing stays disabled until a trainer authorises live credentials.",
+        "height": 150,
+        "width": 900
+      },
+      "id": "note-06",
+      "name": "Lab Contract",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        240,
+        20
+      ]
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Manual Trigger": {
+      "main": [
+        [
+          {
+            "node": "Strategy Decisions",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Strategy Decisions": {
+      "main": [
+        [
+          {
+            "node": "Create Work Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create Work Items": {
+      "main": [
+        [
+          {
+            "node": "Validate Experiment",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Validate Experiment": {
+      "main": [
+        [
+          {
+            "node": "Prioritise Backlog",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prioritise Backlog": {
+      "main": [
+        [
+          {
+            "node": "Owner Review",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Owner Review": {
+      "main": [
+        [
+          {
+            "node": "Approved Backlog",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "saveManualExecutions": true
+  },
+  "versionId": "4d508e8986f27d41cbbf3d0d7fc679d2",
+  "meta": {
+    "templateCredsSetupCompleted": false
+  },
+  "tags": [
+    "TGS-2025056988",
+    "digital-marketing",
+    "human-oversight"
+  ]
+}

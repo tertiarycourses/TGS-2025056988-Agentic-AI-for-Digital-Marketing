@@ -1,6 +1,0 @@
-[00:00] Agent: Northstar Support. How can I help with the synthetic training device?
-[00:05] Caller: My laptop NST-LT-2042 stopped starting after yesterday's update. I have a presentation at three, so I am frustrated and need a workaround.
-[00:16] Agent: Do you see any diagnostic reference or error code?
-[00:21] Caller: The screen shows DIAG-417. I took a screenshot. The device belongs to the design team and I can use the shared kiosk for email, but not for the presentation software.
-[00:35] Agent: I will attach the asset tag, diagnostic reference and screenshot note to request NS-1042. A person will review any High priority escalation draft before it is submitted.
-[00:49] Caller: Please prepare the draft and send me the reference. Do not change my account or install anything yet.

@@ -1,0 +1,206 @@
+{
+  "name": "TGS-2025056988 Lab 09 - Brand, Claim & Compliance QA",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "n09-01",
+      "name": "Manual Trigger",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        240,
+        220
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "return [{\"json\": {\"rule_id\": \"BR-001\", \"category\": \"claim\", \"pattern\": \"guaranteed\", \"severity\": \"high\", \"action\": \"reject\", \"owner\": \"Brand Lead\"}}, {\"json\": {\"rule_id\": \"BR-002\", \"category\": \"privacy\", \"pattern\": \"@\", \"severity\": \"medium\", \"action\": \"review\", \"owner\": \"DPO\"}}, {\"json\": {\"rule_id\": \"BR-003\", \"category\": \"accessibility\", \"pattern\": \"alt_text_missing\", \"severity\": \"medium\", \"action\": \"review\", \"owner\": \"Content Lead\"}}];"
+      },
+      "id": "n09-02",
+      "name": "Draft Assets",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 1,
+      "position": [
+        500,
+        220
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "for (const x of items) { x.json.processed=true; x.json.processed_at=new Date().toISOString(); } return items;"
+      },
+      "id": "n09-03",
+      "name": "Load Brand Rules",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 1,
+      "position": [
+        760,
+        220
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "n09-04",
+      "name": "Run Deterministic Checks",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        1020,
+        220
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "n09-05",
+      "name": "Risk Classifier",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        240,
+        410
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "n09-06",
+      "name": "Pass Queue",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        500,
+        410
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "n09-07",
+      "name": "Review Queue",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        760,
+        410
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "n09-08",
+      "name": "Reject Queue",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        1020,
+        410
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Lab 9: Brand, Claim & Compliance QA\n\n**Input:** data/brand_rules.xlsx\n\n**Metric:** qa_pass_rate = passed_rules / applicable_rules\n\n**Risk:** An AI self-review can miss the same hallucination made during generation\n\nDRY RUN: credentialed publishing stays disabled until a trainer authorises live credentials.",
+        "height": 150,
+        "width": 900
+      },
+      "id": "note-09",
+      "name": "Lab Contract",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        240,
+        20
+      ]
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Manual Trigger": {
+      "main": [
+        [
+          {
+            "node": "Draft Assets",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Draft Assets": {
+      "main": [
+        [
+          {
+            "node": "Load Brand Rules",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Load Brand Rules": {
+      "main": [
+        [
+          {
+            "node": "Run Deterministic Checks",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Run Deterministic Checks": {
+      "main": [
+        [
+          {
+            "node": "Risk Classifier",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Risk Classifier": {
+      "main": [
+        [
+          {
+            "node": "Pass Queue",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Pass Queue": {
+      "main": [
+        [
+          {
+            "node": "Review Queue",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Review Queue": {
+      "main": [
+        [
+          {
+            "node": "Reject Queue",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "saveManualExecutions": true
+  },
+  "versionId": "98043a34e4e8d412c5bb29715efe700d",
+  "meta": {
+    "templateCredsSetupCompleted": false
+  },
+  "tags": [
+    "TGS-2025056988",
+    "digital-marketing",
+    "human-oversight"
+  ]
+}

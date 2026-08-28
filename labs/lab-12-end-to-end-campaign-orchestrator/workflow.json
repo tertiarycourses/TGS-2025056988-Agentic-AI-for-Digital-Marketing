@@ -1,0 +1,250 @@
+{
+  "name": "TGS-2025056988 Lab 12 - End-to-End Campaign Orchestrator",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "n12-01",
+      "name": "Manual Trigger",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        240,
+        220
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "return [{\"json\": {\"run_id\": \"RUN-001\", \"campaign_id\": \"CMP-NS-001\", \"stage\": \"RESEARCH\", \"status\": \"SUCCESS\", \"started_at\": \"2026-09-01T09:00:00+08:00\", \"ended_at\": \"2026-09-01T09:02:00+08:00\", \"evidence_uri\": \"evidence/research.json\", \"error_code\": \"\"}}];"
+      },
+      "id": "n12-02",
+      "name": "Campaign Queue",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 1,
+      "position": [
+        500,
+        220
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "for (const x of items) { x.json.processed=true; x.json.processed_at=new Date().toISOString(); } return items;"
+      },
+      "id": "n12-03",
+      "name": "Research Sub-workflow",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 1,
+      "position": [
+        760,
+        220
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "n12-04",
+      "name": "Strategy Sub-workflow",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        1020,
+        220
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "n12-05",
+      "name": "Content Sub-workflow",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        240,
+        410
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "n12-06",
+      "name": "QA Sub-workflow",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        500,
+        410
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "n12-07",
+      "name": "Approval Sub-workflow",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        760,
+        410
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "n12-08",
+      "name": "Publishing Sub-workflow",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        1020,
+        410
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "n12-09",
+      "name": "Run Ledger",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        240,
+        600
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "n12-10",
+      "name": "Error Handler",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        500,
+        600
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Lab 12: End-to-End Campaign Orchestrator\n\n**Input:** data/orchestrator_runs.xlsx\n\n**Metric:** stage_success_rate = successful_stages / attempted_stages\n\n**Risk:** A parent agent may continue after a failed or unapproved stage\n\nDRY RUN: credentialed publishing stays disabled until a trainer authorises live credentials.",
+        "height": 150,
+        "width": 900
+      },
+      "id": "note-12",
+      "name": "Lab Contract",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        240,
+        20
+      ]
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Manual Trigger": {
+      "main": [
+        [
+          {
+            "node": "Campaign Queue",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Campaign Queue": {
+      "main": [
+        [
+          {
+            "node": "Research Sub-workflow",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Research Sub-workflow": {
+      "main": [
+        [
+          {
+            "node": "Strategy Sub-workflow",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Strategy Sub-workflow": {
+      "main": [
+        [
+          {
+            "node": "Content Sub-workflow",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Content Sub-workflow": {
+      "main": [
+        [
+          {
+            "node": "QA Sub-workflow",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "QA Sub-workflow": {
+      "main": [
+        [
+          {
+            "node": "Approval Sub-workflow",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Approval Sub-workflow": {
+      "main": [
+        [
+          {
+            "node": "Publishing Sub-workflow",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Publishing Sub-workflow": {
+      "main": [
+        [
+          {
+            "node": "Run Ledger",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Run Ledger": {
+      "main": [
+        [
+          {
+            "node": "Error Handler",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "saveManualExecutions": true
+  },
+  "versionId": "044e0d7b1dd5c97e2ba7baea2b180055",
+  "meta": {
+    "templateCredsSetupCompleted": false
+  },
+  "tags": [
+    "TGS-2025056988",
+    "digital-marketing",
+    "human-oversight"
+  ]
+}

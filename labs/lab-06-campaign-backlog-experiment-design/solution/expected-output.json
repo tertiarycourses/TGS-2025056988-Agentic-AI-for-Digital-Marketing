@@ -1,0 +1,11 @@
+{
+  "lab": 6,
+  "status": "PASS",
+  "criteria": [
+    "A2",
+    "A4"
+  ],
+  "metric": "priority = expected_impact \u00d7 confidence / effort",
+  "acceptance": "Each ready item has one falsifiable hypothesis, primary metric, minimum sample, stop rule and accountable owner.",
+  "synthetic_data_only": true
+}

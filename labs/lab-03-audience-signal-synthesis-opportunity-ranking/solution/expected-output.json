@@ -1,0 +1,11 @@
+{
+  "lab": 3,
+  "status": "PASS",
+  "criteria": [
+    "K1",
+    "K2"
+  ],
+  "metric": "ICE = impact \u00d7 confidence / effort",
+  "acceptance": "Every opportunity has evidence_ids, an ICE score and explicit supported status before strategy synthesis.",
+  "synthetic_data_only": true
+}

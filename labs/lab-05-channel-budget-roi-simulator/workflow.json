@@ -1,0 +1,184 @@
+{
+  "name": "TGS-2025056988 Lab 05 - Channel Budget & ROI Simulator",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "n05-01",
+      "name": "Manual Trigger",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        240,
+        220
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "return [{\"json\": {\"channel\": \"LinkedIn\", \"spend\": 6000, \"impressions\": 180000, \"clicks\": 2700, \"leads\": 135, \"customers\": 18, \"revenue\": 27000, \"gross_margin\": 0.68}}, {\"json\": {\"channel\": \"Email\", \"spend\": 1800, \"impressions\": 95000, \"clicks\": 5700, \"leads\": 285, \"customers\": 30, \"revenue\": 33000, \"gross_margin\": 0.68}}, {\"json\": {\"channel\": \"Search\", \"spend\": 7200, \"impressions\": 140000, \"clicks\": 5600, \"leads\": 252, \"customers\": 38, \"revenue\": 45600, \"gross_margin\": 0.68}}];"
+      },
+      "id": "n05-02",
+      "name": "Channel Scenarios",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 1,
+      "position": [
+        500,
+        220
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "for (const x of items) { const j=x.json; j.cac=+(j.spend/j.customers).toFixed(2); j.roas=+(j.revenue/j.spend).toFixed(2); j.roi=+((j.revenue*j.gross_margin-j.spend)/j.spend).toFixed(2); j.volume_ok=j.customers>=10; } return items;"
+      },
+      "id": "n05-03",
+      "name": "Calculate Economics",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 1,
+      "position": [
+        760,
+        220
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "n05-04",
+      "name": "Volume Guardrail",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        1020,
+        220
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "n05-05",
+      "name": "Rank Scenarios",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        240,
+        410
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "n05-06",
+      "name": "Finance Review",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        500,
+        410
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "n05-07",
+      "name": "Budget Decision",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        760,
+        410
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Lab 5: Channel Budget & ROI Simulator\n\n**Input:** data/channel_economics.xlsx\n\n**Metric:** CAC = spend/customers; ROAS = revenue/spend; ROI = (revenue×margin−spend)/spend\n\n**Risk:** Optimising ROAS alone may cut channels that create assisted demand\n\nDRY RUN: credentialed publishing stays disabled until a trainer authorises live credentials.",
+        "height": 150,
+        "width": 900
+      },
+      "id": "note-05",
+      "name": "Lab Contract",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        240,
+        20
+      ]
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Manual Trigger": {
+      "main": [
+        [
+          {
+            "node": "Channel Scenarios",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Channel Scenarios": {
+      "main": [
+        [
+          {
+            "node": "Calculate Economics",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Calculate Economics": {
+      "main": [
+        [
+          {
+            "node": "Volume Guardrail",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Volume Guardrail": {
+      "main": [
+        [
+          {
+            "node": "Rank Scenarios",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Rank Scenarios": {
+      "main": [
+        [
+          {
+            "node": "Finance Review",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Finance Review": {
+      "main": [
+        [
+          {
+            "node": "Budget Decision",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "saveManualExecutions": true
+  },
+  "versionId": "ac246f29b7f71b110b0d3b8fe624d065",
+  "meta": {
+    "templateCredsSetupCompleted": false
+  },
+  "tags": [
+    "TGS-2025056988",
+    "digital-marketing",
+    "human-oversight"
+  ]
+}

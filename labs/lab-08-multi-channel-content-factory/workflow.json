@@ -1,0 +1,184 @@
+{
+  "name": "TGS-2025056988 Lab 08 - Multi-Channel Content Factory",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "n08-01",
+      "name": "Manual Trigger",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        240,
+        220
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "return [{\"json\": {\"asset_id\": \"AST-001\", \"channel\": \"website\", \"format\": \"landing hero\", \"max_chars\": 180, \"message_angle\": \"audit-ready ROI\", \"cta\": \"Book diagnostic\", \"status\": \"draft\"}}, {\"json\": {\"asset_id\": \"AST-002\", \"channel\": \"linkedin\", \"format\": \"single post\", \"max_chars\": 1300, \"message_angle\": \"prove contribution\", \"cta\": \"Read benchmark\", \"status\": \"draft\"}}, {\"json\": {\"asset_id\": \"AST-003\", \"channel\": \"email\", \"format\": \"nurture email\", \"max_chars\": 1800, \"message_angle\": \"reduce reporting friction\", \"cta\": \"Book diagnostic\", \"status\": \"draft\"}}];"
+      },
+      "id": "n08-02",
+      "name": "Approved Brief",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 1,
+      "position": [
+        500,
+        220
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "for (const x of items) { x.json.processed=true; x.json.processed_at=new Date().toISOString(); } return items;"
+      },
+      "id": "n08-03",
+      "name": "Generate Canonical Copy",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 1,
+      "position": [
+        760,
+        220
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "n08-04",
+      "name": "Split Channels",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        1020,
+        220
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "n08-05",
+      "name": "Apply Channel Rules",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        240,
+        410
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "n08-06",
+      "name": "Recombine Assets",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        500,
+        410
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "n08-07",
+      "name": "Content Queue",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        760,
+        410
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Lab 8: Multi-Channel Content Factory\n\n**Input:** data/content_matrix.xlsx\n\n**Metric:** channel_fit = passed_length AND required_fields AND approved_claims_only\n\n**Risk:** Copying identical text across channels ignores audience intent and platform constraints\n\nDRY RUN: credentialed publishing stays disabled until a trainer authorises live credentials.",
+        "height": 150,
+        "width": 900
+      },
+      "id": "note-08",
+      "name": "Lab Contract",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        240,
+        20
+      ]
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Manual Trigger": {
+      "main": [
+        [
+          {
+            "node": "Approved Brief",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Approved Brief": {
+      "main": [
+        [
+          {
+            "node": "Generate Canonical Copy",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate Canonical Copy": {
+      "main": [
+        [
+          {
+            "node": "Split Channels",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Channels": {
+      "main": [
+        [
+          {
+            "node": "Apply Channel Rules",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Apply Channel Rules": {
+      "main": [
+        [
+          {
+            "node": "Recombine Assets",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Recombine Assets": {
+      "main": [
+        [
+          {
+            "node": "Content Queue",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "saveManualExecutions": true
+  },
+  "versionId": "eb10e7fc5b6ef1405895a89bbc9e8b77",
+  "meta": {
+    "templateCredsSetupCompleted": false
+  },
+  "tags": [
+    "TGS-2025056988",
+    "digital-marketing",
+    "human-oversight"
+  ]
+}

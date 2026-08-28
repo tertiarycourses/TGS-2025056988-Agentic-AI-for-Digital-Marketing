@@ -1,4 +1,0 @@
-mode,query,top_source_ids,precision_observation,coverage_observation,empty_result_ok,freshness_ok,permission_filter_ok,latency_ms,notes
-keyword,,,,,,,,,
-vector,,,,,,,,,
-hybrid,,,,,,,,,

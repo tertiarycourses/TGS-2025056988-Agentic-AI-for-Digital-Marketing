@@ -1,0 +1,162 @@
+{
+  "name": "TGS-2025056988 Lab 01 - Campaign Brief Intake & KPI Contract",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "n01-01",
+      "name": "Manual Trigger",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        240,
+        220
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "return [{\"json\": {\"campaign_id\": \"CMP-NS-001\", \"objective\": \"Generate qualified demo requests\", \"audience\": \"SG SME marketing leaders\", \"budget_sgd\": 18000, \"start_date\": \"2026-09-01\", \"end_date\": \"2026-10-31\", \"owner\": \"Aisha\", \"risk_tier\": \"medium\"}}];"
+      },
+      "id": "n01-02",
+      "name": "Brief Input",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 1,
+      "position": [
+        500,
+        220
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "for (const x of items) { const j=x.json; j.brief_completeness=Object.values(j).filter(v=>v!==''&&v!==null).length/Object.keys(j).length; j.review_required=['high','medium'].includes(j.risk_tier); j.kpi_contracts=[{metric:'qualified_leads',formula:'qualified_leads',target:120,owner:j.owner},{metric:'CAC',formula:'spend/customers',target:450,owner:j.owner},{metric:'ROI',formula:'(revenue*margin-spend)/spend',target:1.2,owner:j.owner}]; } return items;"
+      },
+      "id": "n01-03",
+      "name": "Validate Required Fields",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 1,
+      "position": [
+        760,
+        220
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "n01-04",
+      "name": "Build KPI Contract",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        1020,
+        220
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "n01-05",
+      "name": "Needs Review?",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        240,
+        410
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "n01-06",
+      "name": "Output Contract",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        500,
+        410
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Lab 1: Campaign Brief Intake & KPI Contract\n\n**Input:** data/campaign_brief.xlsx\n\n**Metric:** brief_completeness = populated_required_fields / 8\n\n**Risk:** Missing owner or budget can cause unbounded spend\n\nDRY RUN: credentialed publishing stays disabled until a trainer authorises live credentials.",
+        "height": 150,
+        "width": 900
+      },
+      "id": "note-01",
+      "name": "Lab Contract",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        240,
+        20
+      ]
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Manual Trigger": {
+      "main": [
+        [
+          {
+            "node": "Brief Input",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Brief Input": {
+      "main": [
+        [
+          {
+            "node": "Validate Required Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Validate Required Fields": {
+      "main": [
+        [
+          {
+            "node": "Build KPI Contract",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build KPI Contract": {
+      "main": [
+        [
+          {
+            "node": "Needs Review?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Needs Review?": {
+      "main": [
+        [
+          {
+            "node": "Output Contract",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "saveManualExecutions": true
+  },
+  "versionId": "f4fe09db1ced25fca5f8d93100d7d18d",
+  "meta": {
+    "templateCredsSetupCompleted": false
+  },
+  "tags": [
+    "TGS-2025056988",
+    "digital-marketing",
+    "human-oversight"
+  ]
+}

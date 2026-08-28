@@ -1,0 +1,184 @@
+{
+  "name": "TGS-2025056988 Lab 07 - Content Brief & Prompt Contract",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "n07-01",
+      "name": "Manual Trigger",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        240,
+        220
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "return [{\"json\": {\"brief_id\": \"BRF-001\", \"campaign_id\": \"CMP-NS-001\", \"audience_job\": \"Prove pipeline contribution\", \"message\": \"Connect campaign activity to qualified demand\", \"approved_claims\": \"measurable|auditable\", \"evidence_ids\": \"SRC-001\", \"tone\": \"confident-practical\", \"cta\": \"Book an ROI diagnostic\", \"prohibited_terms\": \"guaranteed|effortless\"}}];"
+      },
+      "id": "n07-02",
+      "name": "Approved Backlog",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 1,
+      "position": [
+        500,
+        220
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "for (const x of items) { x.json.processed=true; x.json.processed_at=new Date().toISOString(); } return items;"
+      },
+      "id": "n07-03",
+      "name": "Assemble Brief",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 1,
+      "position": [
+        760,
+        220
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "n07-04",
+      "name": "Schema Validator",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        1020,
+        220
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "n07-05",
+      "name": "Claim Gate",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        240,
+        410
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "n07-06",
+      "name": "Prompt Contract",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        500,
+        410
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "n07-07",
+      "name": "Brief Approval",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        760,
+        410
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Lab 7: Content Brief & Prompt Contract\n\n**Input:** data/content_brief.xlsx\n\n**Metric:** contract_valid = required_fields_present AND evidence_ids_resolved\n\n**Risk:** Unbounded prompts can invent claims or leak confidential context\n\nDRY RUN: credentialed publishing stays disabled until a trainer authorises live credentials.",
+        "height": 150,
+        "width": 900
+      },
+      "id": "note-07",
+      "name": "Lab Contract",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        240,
+        20
+      ]
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Manual Trigger": {
+      "main": [
+        [
+          {
+            "node": "Approved Backlog",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Approved Backlog": {
+      "main": [
+        [
+          {
+            "node": "Assemble Brief",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Assemble Brief": {
+      "main": [
+        [
+          {
+            "node": "Schema Validator",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Schema Validator": {
+      "main": [
+        [
+          {
+            "node": "Claim Gate",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Claim Gate": {
+      "main": [
+        [
+          {
+            "node": "Prompt Contract",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prompt Contract": {
+      "main": [
+        [
+          {
+            "node": "Brief Approval",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "saveManualExecutions": true
+  },
+  "versionId": "0b98192e77f32853870072b4ff2e4895",
+  "meta": {
+    "templateCredsSetupCompleted": false
+  },
+  "tags": [
+    "TGS-2025056988",
+    "digital-marketing",
+    "human-oversight"
+  ]
+}

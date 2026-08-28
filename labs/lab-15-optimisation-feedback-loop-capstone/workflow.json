@@ -1,0 +1,228 @@
+{
+  "name": "TGS-2025056988 Lab 15 - Optimisation Feedback Loop & Capstone",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "n15-01",
+      "name": "Schedule Trigger",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        240,
+        220
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "return [{\"json\": {\"action_id\": \"OPT-001\", \"finding\": \"Email ROI exceeds baseline with stable unsubscribe rate\", \"evidence\": \"DASH-2026-W37\", \"proposed_change\": \"Increase email test allocation by 10%\", \"expected_impact\": 0.08, \"risk\": \"medium\", \"owner\": \"Aisha\", \"decision\": \"PENDING\", \"next_review\": \"2026-09-25\"}}];"
+      },
+      "id": "n15-02",
+      "name": "Latest Dashboard",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 1,
+      "position": [
+        500,
+        220
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "for (const x of items) { const j=x.json; const m=String(j.proposed_change).match(/(\\d+)%/); j.change_pct=m?Number(m[1]):0; j.policy_pass=j.change_pct<=20; j.live_mutation=false; } return items;"
+      },
+      "id": "n15-03",
+      "name": "Generate Recommendation",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 1,
+      "position": [
+        760,
+        220
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "n15-04",
+      "name": "Policy Guardrails",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        1020,
+        220
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "n15-05",
+      "name": "Human Optimisation Review",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        240,
+        410
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "n15-06",
+      "name": "Approved Experiment",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        500,
+        410
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "n15-07",
+      "name": "Rejected Recommendation",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        760,
+        410
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "n15-08",
+      "name": "Update Backlog",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        1020,
+        410
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "n15-09",
+      "name": "Cycle Audit",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        240,
+        600
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Lab 15: Optimisation Feedback Loop & Capstone\n\n**Input:** data/optimisation_actions.xlsx\n\n**Metric:** realised_lift = (new_result−baseline)/baseline\n\n**Risk:** A self-optimising agent can chase short-term metrics and exceed delegated authority\n\nDRY RUN: credentialed publishing stays disabled until a trainer authorises live credentials.",
+        "height": 150,
+        "width": 900
+      },
+      "id": "note-15",
+      "name": "Lab Contract",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        240,
+        20
+      ]
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Latest Dashboard",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Latest Dashboard": {
+      "main": [
+        [
+          {
+            "node": "Generate Recommendation",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate Recommendation": {
+      "main": [
+        [
+          {
+            "node": "Policy Guardrails",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Policy Guardrails": {
+      "main": [
+        [
+          {
+            "node": "Human Optimisation Review",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Human Optimisation Review": {
+      "main": [
+        [
+          {
+            "node": "Approved Experiment",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Approved Experiment": {
+      "main": [
+        [
+          {
+            "node": "Rejected Recommendation",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Rejected Recommendation": {
+      "main": [
+        [
+          {
+            "node": "Update Backlog",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update Backlog": {
+      "main": [
+        [
+          {
+            "node": "Cycle Audit",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "saveManualExecutions": true
+  },
+  "versionId": "235af3717e55a37450b48f18428b408a",
+  "meta": {
+    "templateCredsSetupCompleted": false
+  },
+  "tags": [
+    "TGS-2025056988",
+    "digital-marketing",
+    "human-oversight"
+  ]
+}

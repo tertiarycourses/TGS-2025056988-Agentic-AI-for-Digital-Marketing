@@ -1,0 +1,11 @@
+{
+  "lab": 1,
+  "status": "PASS",
+  "criteria": [
+    "A1",
+    "A2"
+  ],
+  "metric": "brief_completeness = populated_required_fields / 8",
+  "acceptance": "Output contains campaign_id CMP-NS-001, at least three KPI contracts, one owner per KPI and a human-review flag.",
+  "synthetic_data_only": true
+}

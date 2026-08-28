@@ -1,0 +1,12 @@
+{
+  "lab": 13,
+  "status": "PASS",
+  "criteria": [
+    "K2",
+    "K4",
+    "A3"
+  ],
+  "metric": "data_quality = valid_unique_events / received_events",
+  "acceptance": "All facts have unique event_id, valid campaign_id, normalised time and an explicit attribution rule or quarantine reason.",
+  "synthetic_data_only": true
+}

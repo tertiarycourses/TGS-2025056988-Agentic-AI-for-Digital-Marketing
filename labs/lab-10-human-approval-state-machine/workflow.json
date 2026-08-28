@@ -1,0 +1,231 @@
+{
+  "name": "TGS-2025056988 Lab 10 - Human Approval State Machine",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "n10-01",
+      "name": "Manual Trigger",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        240,
+        220
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "return [{\"json\": {\"approval_id\": \"APR-001\", \"asset_id\": \"AST-001\", \"payload_hash\": \"sha256-demo-001\", \"risk\": \"medium\", \"reviewer\": \"Aisha\", \"status\": \"PENDING\", \"decision_at\": \"\", \"comment\": \"\"}}];"
+      },
+      "id": "n10-02",
+      "name": "QA-Passed Assets",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 1,
+      "position": [
+        500,
+        220
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const crypto=require('crypto'); for (const x of items) { const j=x.json; j.payload_hash=crypto.createHash('sha256').update(JSON.stringify(j)).digest('hex'); j.status=j.status||'PENDING'; } return items;"
+      },
+      "id": "n10-03",
+      "name": "Create Approval Record",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 1,
+      "position": [
+        760,
+        220
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "n10-04",
+      "name": "Send Approval Request",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        1020,
+        220
+      ]
+    },
+    {
+      "parameters": {
+        "resume": "webhook",
+        "options": {}
+      },
+      "id": "n10-05",
+      "name": "Wait for Decision",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1,
+      "position": [
+        240,
+        410
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "n10-06",
+      "name": "Verify Payload Hash",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        500,
+        410
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "n10-07",
+      "name": "Approved",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        760,
+        410
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "n10-08",
+      "name": "Rejected",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        1020,
+        410
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "n10-09",
+      "name": "Escalated",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        240,
+        600
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Lab 10: Human Approval State Machine\n\n**Input:** data/approval_queue.xlsx\n\n**Metric:** approval_integrity = decision_hash == current_payload_hash\n\n**Risk:** A reviewer may approve one version while a changed payload is later published\n\nDRY RUN: credentialed publishing stays disabled until a trainer authorises live credentials.",
+        "height": 150,
+        "width": 900
+      },
+      "id": "note-10",
+      "name": "Lab Contract",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        240,
+        20
+      ]
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Manual Trigger": {
+      "main": [
+        [
+          {
+            "node": "QA-Passed Assets",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "QA-Passed Assets": {
+      "main": [
+        [
+          {
+            "node": "Create Approval Record",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create Approval Record": {
+      "main": [
+        [
+          {
+            "node": "Send Approval Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send Approval Request": {
+      "main": [
+        [
+          {
+            "node": "Wait for Decision",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait for Decision": {
+      "main": [
+        [
+          {
+            "node": "Verify Payload Hash",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Verify Payload Hash": {
+      "main": [
+        [
+          {
+            "node": "Approved",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Approved": {
+      "main": [
+        [
+          {
+            "node": "Rejected",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Rejected": {
+      "main": [
+        [
+          {
+            "node": "Escalated",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "saveManualExecutions": true
+  },
+  "versionId": "acce52f3254a1a24023451707a6a82e2",
+  "meta": {
+    "templateCredsSetupCompleted": false
+  },
+  "tags": [
+    "TGS-2025056988",
+    "digital-marketing",
+    "human-oversight"
+  ]
+}

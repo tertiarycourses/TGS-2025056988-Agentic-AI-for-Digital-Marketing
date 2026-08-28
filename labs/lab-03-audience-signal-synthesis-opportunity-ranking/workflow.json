@@ -1,0 +1,184 @@
+{
+  "name": "TGS-2025056988 Lab 03 - Audience Signal Synthesis & Opportunity Ranking",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "n03-01",
+      "name": "Manual Trigger",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        240,
+        220
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "return [{\"json\": {\"signal_id\": \"SIG-001\", \"segment\": \"SG SME marketing lead\", \"job\": \"Prove pipeline contribution\", \"pain\": \"Disconnected channel reports\", \"trigger\": \"Quarterly planning\", \"evidence_ids\": \"SRC-001|SRC-002\", \"impact\": 5, \"confidence\": 4, \"effort\": 2}}];"
+      },
+      "id": "n03-02",
+      "name": "Audience Signals",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 1,
+      "position": [
+        500,
+        220
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "for (const x of items) { const j=x.json; j.ice=+(j.impact*j.confidence/j.effort).toFixed(2); j.supported=Boolean(j.evidence_ids); } return items;"
+      },
+      "id": "n03-03",
+      "name": "Validate Evidence Links",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 1,
+      "position": [
+        760,
+        220
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "n03-04",
+      "name": "Compute ICE Score",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        1020,
+        220
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "n03-05",
+      "name": "Rank Opportunities",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        240,
+        410
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "n03-06",
+      "name": "Human Sense-check",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        500,
+        410
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "n03-07",
+      "name": "Opportunity Backlog",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        760,
+        410
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Lab 3: Audience Signal Synthesis & Opportunity Ranking\n\n**Input:** data/audience_signals.xlsx\n\n**Metric:** ICE = impact × confidence / effort\n\n**Risk:** AI-generated personas may encode stereotypes or unsupported claims\n\nDRY RUN: credentialed publishing stays disabled until a trainer authorises live credentials.",
+        "height": 150,
+        "width": 900
+      },
+      "id": "note-03",
+      "name": "Lab Contract",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        240,
+        20
+      ]
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Manual Trigger": {
+      "main": [
+        [
+          {
+            "node": "Audience Signals",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Audience Signals": {
+      "main": [
+        [
+          {
+            "node": "Validate Evidence Links",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Validate Evidence Links": {
+      "main": [
+        [
+          {
+            "node": "Compute ICE Score",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Compute ICE Score": {
+      "main": [
+        [
+          {
+            "node": "Rank Opportunities",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Rank Opportunities": {
+      "main": [
+        [
+          {
+            "node": "Human Sense-check",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Human Sense-check": {
+      "main": [
+        [
+          {
+            "node": "Opportunity Backlog",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "saveManualExecutions": true
+  },
+  "versionId": "27507b87c8bf06594c852c1459bd58c2",
+  "meta": {
+    "templateCredsSetupCompleted": false
+  },
+  "tags": [
+    "TGS-2025056988",
+    "digital-marketing",
+    "human-oversight"
+  ]
+}

@@ -1,8 +1,0 @@
-case_id,correlation_id,observed_behavior,expected_behavior,failure_stage,evidence,impact,owner,proposed_change,regression_case
-,,,,routing,,,,,
-,,,,tool_selection,,,,,
-,,,,tool_input,,,,,
-,,,,tool_result,,,,,
-,,,,generation,,,,,
-,,,,policy,,,,,
-,,,,infrastructure,,,,,

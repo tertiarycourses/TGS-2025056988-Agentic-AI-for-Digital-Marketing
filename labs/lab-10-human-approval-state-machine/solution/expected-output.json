@@ -1,0 +1,10 @@
+{
+  "lab": 10,
+  "status": "PASS",
+  "criteria": [
+    "A5"
+  ],
+  "metric": "approval_integrity = decision_hash == current_payload_hash",
+  "acceptance": "Only APPROVED records with a matching payload hash proceed; rejected and changed payloads cannot publish.",
+  "synthetic_data_only": true
+}

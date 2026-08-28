@@ -1,0 +1,12 @@
+{
+  "lab": 15,
+  "status": "PASS",
+  "criteria": [
+    "A3",
+    "A4",
+    "A5"
+  ],
+  "metric": "realised_lift = (new_result\u2212baseline)/baseline",
+  "acceptance": "No optimisation changes a live campaign automatically; approved recommendations create a measured next-cycle experiment with full lineage.",
+  "synthetic_data_only": true
+}

@@ -1,0 +1,206 @@
+{
+  "name": "TGS-2025056988 Lab 14 - ROI Dashboard & Anomaly Detection",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "n14-01",
+      "name": "Manual Trigger",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        240,
+        220
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "return [{\"json\": {\"period\": \"2026-W37\", \"channel\": \"LinkedIn\", \"spend\": 1550, \"customers\": 6, \"revenue\": 9000, \"gross_margin\": 0.68, \"baseline_cv\": 0.041, \"current_cv\": 0.055}}, {\"json\": {\"period\": \"2026-W37\", \"channel\": \"Email\", \"spend\": 420, \"customers\": 9, \"revenue\": 9900, \"gross_margin\": 0.68, \"baseline_cv\": 0.052, \"current_cv\": 0.064}}];"
+      },
+      "id": "n14-02",
+      "name": "Performance Facts",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 1,
+      "position": [
+        500,
+        220
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "for (const x of items) { const j=x.json; j.cac=+(j.spend/j.customers).toFixed(2); j.roas=+(j.revenue/j.spend).toFixed(2); j.roi=+((j.revenue*j.gross_margin-j.spend)/j.spend).toFixed(2); j.relative_lift=+((j.current_cv-j.baseline_cv)/j.baseline_cv).toFixed(3); j.low_volume=j.customers<5; } return items;"
+      },
+      "id": "n14-03",
+      "name": "Aggregate Channel-Period",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 1,
+      "position": [
+        760,
+        220
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "n14-04",
+      "name": "Calculate ROI",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        1020,
+        220
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "n14-05",
+      "name": "Compare Baseline",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        240,
+        410
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "n14-06",
+      "name": "Guardrail Check",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        500,
+        410
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "n14-07",
+      "name": "Dashboard Dataset",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        760,
+        410
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "n14-08",
+      "name": "Analyst Review",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        1020,
+        410
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Lab 14: ROI Dashboard & Anomaly Detection\n\n**Input:** data/roi_dashboard.xlsx\n\n**Metric:** ROI = (revenue×gross_margin−spend)/spend; lift = (current−baseline)/baseline\n\n**Risk:** Small samples can produce dramatic but unreliable lift\n\nDRY RUN: credentialed publishing stays disabled until a trainer authorises live credentials.",
+        "height": 150,
+        "width": 900
+      },
+      "id": "note-14",
+      "name": "Lab Contract",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        240,
+        20
+      ]
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Manual Trigger": {
+      "main": [
+        [
+          {
+            "node": "Performance Facts",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Performance Facts": {
+      "main": [
+        [
+          {
+            "node": "Aggregate Channel-Period",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Aggregate Channel-Period": {
+      "main": [
+        [
+          {
+            "node": "Calculate ROI",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Calculate ROI": {
+      "main": [
+        [
+          {
+            "node": "Compare Baseline",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Compare Baseline": {
+      "main": [
+        [
+          {
+            "node": "Guardrail Check",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Guardrail Check": {
+      "main": [
+        [
+          {
+            "node": "Dashboard Dataset",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Dashboard Dataset": {
+      "main": [
+        [
+          {
+            "node": "Analyst Review",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "saveManualExecutions": true
+  },
+  "versionId": "e3ff87c619431292c72275e1fa1e7120",
+  "meta": {
+    "templateCredsSetupCompleted": false
+  },
+  "tags": [
+    "TGS-2025056988",
+    "digital-marketing",
+    "human-oversight"
+  ]
+}

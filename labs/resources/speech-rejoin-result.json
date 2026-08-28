@@ -1,9 +1,0 @@
-{
-  "mode": "speech_rejoin",
-  "reason": "RecognizedSpeech",
-  "text": "My request is NS-1042 and the laptop asset tag is NST-LT-2042. The diagnostic reference is DIAG-417. I have a presentation at three.",
-  "result_id": "speech_sanitized_001",
-  "offset_ticks": 1200000,
-  "duration_ticks": 86500000,
-  "locale": "en-US"
-}

@@ -1,0 +1,11 @@
+{
+  "lab": 7,
+  "status": "PASS",
+  "criteria": [
+    "K3",
+    "A4"
+  ],
+  "metric": "contract_valid = required_fields_present AND evidence_ids_resolved",
+  "acceptance": "The approved contract includes evidence IDs, approved claims, prohibited terms, CTA, version and contract hash.",
+  "synthetic_data_only": true
+}

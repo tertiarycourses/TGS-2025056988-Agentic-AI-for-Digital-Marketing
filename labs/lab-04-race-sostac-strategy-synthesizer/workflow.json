@@ -1,0 +1,184 @@
+{
+  "name": "TGS-2025056988 Lab 04 - RACE/SOSTAC Strategy Synthesizer",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "n04-01",
+      "name": "Manual Trigger",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        240,
+        220
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "return [{\"json\": {\"stage\": \"REACH\", \"decision\": \"Publish evidence-led benchmark\", \"evidence_id\": \"SRC-001\", \"owner\": \"Aisha\", \"kpi\": \"qualified_reach\", \"target\": 75000, \"review_date\": \"2026-09-15\"}}, {\"json\": {\"stage\": \"ACT\", \"decision\": \"Offer ROI diagnostic\", \"evidence_id\": \"SIG-001\", \"owner\": \"Ben\", \"kpi\": \"landing_page_cv\", \"target\": 0.055, \"review_date\": \"2026-09-30\"}}];"
+      },
+      "id": "n04-02",
+      "name": "Approved Opportunities",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 1,
+      "position": [
+        500,
+        220
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "for (const x of items) { x.json.processed=true; x.json.processed_at=new Date().toISOString(); } return items;"
+      },
+      "id": "n04-03",
+      "name": "Build RACE Map",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 1,
+      "position": [
+        760,
+        220
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "n04-04",
+      "name": "Build SOSTAC Control",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        1020,
+        220
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "n04-05",
+      "name": "Alignment Gate",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        240,
+        410
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "n04-06",
+      "name": "Strategy Draft",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        500,
+        410
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "n04-07",
+      "name": "Strategy Review",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        760,
+        410
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Lab 4: RACE/SOSTAC Strategy Synthesizer\n\n**Input:** data/strategy_model.xlsx\n\n**Metric:** alignment_rate = decisions_with_objective_and_owner / total_decisions\n\n**Risk:** Channel tactics can drift from the business objective\n\nDRY RUN: credentialed publishing stays disabled until a trainer authorises live credentials.",
+        "height": 150,
+        "width": 900
+      },
+      "id": "note-04",
+      "name": "Lab Contract",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        240,
+        20
+      ]
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Manual Trigger": {
+      "main": [
+        [
+          {
+            "node": "Approved Opportunities",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Approved Opportunities": {
+      "main": [
+        [
+          {
+            "node": "Build RACE Map",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build RACE Map": {
+      "main": [
+        [
+          {
+            "node": "Build SOSTAC Control",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build SOSTAC Control": {
+      "main": [
+        [
+          {
+            "node": "Alignment Gate",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Alignment Gate": {
+      "main": [
+        [
+          {
+            "node": "Strategy Draft",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Strategy Draft": {
+      "main": [
+        [
+          {
+            "node": "Strategy Review",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "saveManualExecutions": true
+  },
+  "versionId": "89e7be394e88bd64ee4f997b3df1fec6",
+  "meta": {
+    "templateCredsSetupCompleted": false
+  },
+  "tags": [
+    "TGS-2025056988",
+    "digital-marketing",
+    "human-oversight"
+  ]
+}

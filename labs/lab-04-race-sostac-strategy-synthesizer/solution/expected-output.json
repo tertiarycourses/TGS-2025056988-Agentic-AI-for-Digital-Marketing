@@ -1,0 +1,12 @@
+{
+  "lab": 4,
+  "status": "PASS",
+  "criteria": [
+    "K1",
+    "K3",
+    "A4"
+  ],
+  "metric": "alignment_rate = decisions_with_objective_and_owner / total_decisions",
+  "acceptance": "All strategy decisions trace to evidence, map to RACE, include control fields and pass human strategy review.",
+  "synthetic_data_only": true
+}
