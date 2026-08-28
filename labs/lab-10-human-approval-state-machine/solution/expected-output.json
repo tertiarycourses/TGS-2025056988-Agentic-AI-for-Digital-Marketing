@@ -1,10 +1,29 @@
 {
   "lab": 10,
-  "status": "PASS",
   "criteria": [
     "A5"
   ],
+  "terminal_node": "Approved",
+  "evidence_file": "approval-record.json",
+  "representative_output": {
+    "approval_id": "APR-001",
+    "asset_id": "AST-002",
+    "api_path": "/api/upload_text",
+    "user": "northstar_training",
+    "platforms": "linkedin",
+    "title": "Prove campaign contribution",
+    "caption": "Read the benchmark",
+    "decision_hash": "419ad8f34f7501f8cfe997939468cc5423dff20c1668584f55c1d830c517ac36",
+    "risk": "medium",
+    "reviewer": "Aisha",
+    "status": "APPROVED",
+    "decision_at": "2026-09-09T16:30:00+08:00",
+    "comment": "Approved for sandbox text post",
+    "current_payload_hash": "419ad8f34f7501f8cfe997939468cc5423dff20c1668584f55c1d830c517ac36",
+    "approval_verified": true,
+    "terminal_node": "Approved"
+  },
   "metric": "approval_integrity = decision_hash == current_payload_hash",
-  "acceptance": "Only APPROVED records with a matching payload hash proceed; rejected and changed payloads cannot publish.",
+  "acceptance": "Only APPROVED records with a matching SocialPost payload hash proceed; rejected, retargeted or changed payloads cannot publish.",
   "synthetic_data_only": true
 }

@@ -14,12 +14,12 @@
     },
     {
       "parameters": {
-        "jsCode": "return [{\"json\": {\"approval_id\": \"APR-001\", \"asset_id\": \"AST-001\", \"payload_hash\": \"sha256-demo-001\", \"risk\": \"medium\", \"reviewer\": \"Aisha\", \"status\": \"PENDING\", \"decision_at\": \"\", \"comment\": \"\"}}];"
+        "jsCode": "return [{\"json\": {\"approval_id\": \"APR-001\", \"asset_id\": \"AST-002\", \"api_path\": \"/api/upload_text\", \"user\": \"northstar_training\", \"platforms\": \"linkedin\", \"title\": \"Prove campaign contribution\", \"caption\": \"Read the benchmark\", \"decision_hash\": \"419ad8f34f7501f8cfe997939468cc5423dff20c1668584f55c1d830c517ac36\", \"risk\": \"medium\", \"reviewer\": \"Aisha\", \"status\": \"APPROVED\", \"decision_at\": \"2026-09-09T16:30:00+08:00\", \"comment\": \"Approved for sandbox text post\"}}];"
       },
       "id": "n10-02",
       "name": "QA-Passed Assets",
       "type": "n8n-nodes-base.code",
-      "typeVersion": 1,
+      "typeVersion": 2,
       "position": [
         500,
         220
@@ -27,12 +27,12 @@
     },
     {
       "parameters": {
-        "jsCode": "const crypto=require('crypto'); for (const x of items) { const j=x.json; j.payload_hash=crypto.createHash('sha256').update(JSON.stringify(j)).digest('hex'); j.status=j.status||'PENDING'; } return items;"
+        "jsCode": "function sha256(ascii){const rr=(v,a)=>(v>>>a)|(v<<(32-a));const mp=Math.pow,mw=mp(2,32);let i,j,res='',words=[],bit=ascii.length*8,hash=sha256.h=sha256.h||[],k=sha256.k=sha256.k||[],pc=k.length,comp={};for(let c=2;pc<64;c++){if(!comp[c]){for(i=0;i<313;i+=c)comp[i]=c;hash[pc]=(mp(c,.5)*mw)|0;k[pc++]=(mp(c,1/3)*mw)|0;}}ascii+='\\x80';while(ascii.length%64-56)ascii+='\\x00';for(i=0;i<ascii.length;i++){j=ascii.charCodeAt(i);if(j>>8)throw new Error('SHA-256 helper accepts ASCII canonical payloads only');words[i>>2]|=j<<((3-i)%4)*8;}words[words.length]=(bit/mw)|0;words[words.length]=bit;for(j=0;j<words.length;){let w=words.slice(j,j+=16),old=hash;hash=hash.slice(0,8);for(i=0;i<64;i++){let w15=w[i-15],w2=w[i-2],a=hash[0],e=hash[4],t1=hash[7]+(rr(e,6)^rr(e,11)^rr(e,25))+((e&hash[5])^((~e)&hash[6]))+k[i]+(w[i]=(i<16)?w[i]:((w[i-16]+(rr(w15,7)^rr(w15,18)^(w15>>>3))+w[i-7]+(rr(w2,17)^rr(w2,19)^(w2>>>10)))|0)),t2=(rr(a,2)^rr(a,13)^rr(a,22))+((a&hash[1])^(a&hash[2])^(hash[1]&hash[2]));hash=[(t1+t2)|0,a,hash[1],hash[2],(hash[3]+t1)|0,e,hash[5],hash[6]];}for(i=0;i<8;i++)hash[i]=(hash[i]+old[i])|0;}for(i=0;i<8;i++)for(j=3;j+1;j--){let b=(hash[i]>>(j*8))&255;res+=(b<16?'0':'')+b.toString(16);}return res;}for (const x of items) { const j=x.json; const platforms=String(j.platforms||'').split('|').map(v=>v.trim()).filter(Boolean); const canonical={asset_id:j.asset_id,api_path:j.api_path,user:j.user,platforms,title:j.title,caption:j.caption}; j.platforms=platforms; j.canonical_payload=canonical; j.current_payload_hash=sha256(JSON.stringify(canonical)); j.approval_verified=false; } return items;"
       },
       "id": "n10-03",
       "name": "Create Approval Record",
       "type": "n8n-nodes-base.code",
-      "typeVersion": 1,
+      "typeVersion": 2,
       "position": [
         760,
         220
@@ -57,54 +57,131 @@
       "id": "n10-05",
       "name": "Wait for Decision",
       "type": "n8n-nodes-base.wait",
-      "typeVersion": 1,
+      "typeVersion": 1.1,
       "position": [
-        240,
-        410
-      ]
+        1280,
+        220
+      ],
+      "disabled": true
     },
     {
-      "parameters": {},
+      "parameters": {
+        "jsCode": "function sha256(ascii){const rr=(v,a)=>(v>>>a)|(v<<(32-a));const mp=Math.pow,mw=mp(2,32);let i,j,res='',words=[],bit=ascii.length*8,hash=sha256.h=sha256.h||[],k=sha256.k=sha256.k||[],pc=k.length,comp={};for(let c=2;pc<64;c++){if(!comp[c]){for(i=0;i<313;i+=c)comp[i]=c;hash[pc]=(mp(c,.5)*mw)|0;k[pc++]=(mp(c,1/3)*mw)|0;}}ascii+='\\x80';while(ascii.length%64-56)ascii+='\\x00';for(i=0;i<ascii.length;i++){j=ascii.charCodeAt(i);if(j>>8)throw new Error('SHA-256 helper accepts ASCII canonical payloads only');words[i>>2]|=j<<((3-i)%4)*8;}words[words.length]=(bit/mw)|0;words[words.length]=bit;for(j=0;j<words.length;){let w=words.slice(j,j+=16),old=hash;hash=hash.slice(0,8);for(i=0;i<64;i++){let w15=w[i-15],w2=w[i-2],a=hash[0],e=hash[4],t1=hash[7]+(rr(e,6)^rr(e,11)^rr(e,25))+((e&hash[5])^((~e)&hash[6]))+k[i]+(w[i]=(i<16)?w[i]:((w[i-16]+(rr(w15,7)^rr(w15,18)^(w15>>>3))+w[i-7]+(rr(w2,17)^rr(w2,19)^(w2>>>10)))|0)),t2=(rr(a,2)^rr(a,13)^rr(a,22))+((a&hash[1])^(a&hash[2])^(hash[1]&hash[2]));hash=[(t1+t2)|0,a,hash[1],hash[2],(hash[3]+t1)|0,e,hash[5],hash[6]];}for(i=0;i<8;i++)hash[i]=(hash[i]+old[i])|0;}for(i=0;i<8;i++)for(j=3;j+1;j--){let b=(hash[i]>>(j*8))&255;res+=(b<16?'0':'')+b.toString(16);}return res;}for (const x of items) { const j=x.json; const canonical={asset_id:j.asset_id,api_path:j.api_path,user:j.user,platforms:j.platforms,title:j.title,caption:j.caption}; j.current_payload_hash=sha256(JSON.stringify(canonical)); j.approval_verified=j.status==='APPROVED'&&j.decision_hash===j.current_payload_hash; j.decision_record={approval_id:j.approval_id,reviewer:j.reviewer,decision_at:j.decision_at,decision_hash:j.decision_hash,canonical_payload:canonical}; } return items;"
+      },
       "id": "n10-06",
       "name": "Verify Payload Hash",
-      "type": "n8n-nodes-base.noOp",
-      "typeVersion": 1,
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
       "position": [
-        500,
-        410
+        1540,
+        220
       ]
     },
     {
-      "parameters": {},
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "n10-07-condition",
+              "leftValue": "={{ $json.status === 'APPROVED' && $json.approval_verified === true }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
       "id": "n10-07",
-      "name": "Approved",
-      "type": "n8n-nodes-base.noOp",
-      "typeVersion": 1,
+      "name": "Approved?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
       "position": [
-        760,
-        410
+        1800,
+        220
       ]
     },
     {
-      "parameters": {},
+      "parameters": {
+        "jsCode": "for (const x of items) { const j=x.json; j.terminal_node='Approved'; j.publish_id=`PUB-${j.approval_id}`; j.media_type=j.api_path==='/api/upload_photos'?'photos':(j.api_path==='/api/upload'?'video':'text'); j.description=j.description||''; j.media_path=j.media_path||''; j.scheduled_at=j.decision_at; j.idempotency_key=`${j.approval_id}:${j.asset_id}:${j.decision_hash}`; j.credential_ready=false; j.dry_run=true; j.status='READY'; } return items;"
+      },
       "id": "n10-08",
-      "name": "Rejected",
-      "type": "n8n-nodes-base.noOp",
-      "typeVersion": 1,
+      "name": "Approved",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
       "position": [
-        1020,
-        410
+        2060,
+        150
       ]
     },
     {
-      "parameters": {},
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "n10-09-condition",
+              "leftValue": "={{ $json.status === 'REJECTED' }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
       "id": "n10-09",
-      "name": "Escalated",
-      "type": "n8n-nodes-base.noOp",
-      "typeVersion": 1,
+      "name": "Rejected?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
       "position": [
-        240,
-        600
+        2060,
+        330
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "for (const x of items) { x.json.terminal_node='Rejected'; } return items;"
+      },
+      "id": "n10-10",
+      "name": "Rejected",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2320,
+        290
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "for (const x of items) { const mismatch=x.json.decision_hash!==x.json.current_payload_hash; x.json.status='ESCALATED'; x.json.terminal_node='Escalated'; x.json.escalation_reason=mismatch?'Payload hash mismatch':'No approved decision'; } return items;"
+      },
+      "id": "n10-11",
+      "name": "Escalated",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2320,
+        430
       ]
     },
     {
@@ -184,14 +261,32 @@
       "main": [
         [
           {
-            "node": "Approved",
+            "node": "Approved?",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Approved": {
+    "Approved?": {
+      "main": [
+        [
+          {
+            "node": "Approved",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Rejected?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Rejected?": {
       "main": [
         [
           {
@@ -199,11 +294,7 @@
             "type": "main",
             "index": 0
           }
-        ]
-      ]
-    },
-    "Rejected": {
-      "main": [
+        ],
         [
           {
             "node": "Escalated",
@@ -219,13 +310,9 @@
     "executionOrder": "v1",
     "saveManualExecutions": true
   },
-  "versionId": "acce52f3254a1a24023451707a6a82e2",
+  "versionId": "2d4f3f0080c91dca011cde92777d01ad",
   "meta": {
     "templateCredsSetupCompleted": false
   },
-  "tags": [
-    "TGS-2025056988",
-    "digital-marketing",
-    "human-oversight"
-  ]
+  "tags": []
 }

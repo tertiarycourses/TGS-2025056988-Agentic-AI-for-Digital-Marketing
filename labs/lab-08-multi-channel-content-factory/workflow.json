@@ -14,12 +14,12 @@
     },
     {
       "parameters": {
-        "jsCode": "return [{\"json\": {\"asset_id\": \"AST-001\", \"channel\": \"website\", \"format\": \"landing hero\", \"max_chars\": 180, \"message_angle\": \"audit-ready ROI\", \"cta\": \"Book diagnostic\", \"status\": \"draft\"}}, {\"json\": {\"asset_id\": \"AST-002\", \"channel\": \"linkedin\", \"format\": \"single post\", \"max_chars\": 1300, \"message_angle\": \"prove contribution\", \"cta\": \"Read benchmark\", \"status\": \"draft\"}}, {\"json\": {\"asset_id\": \"AST-003\", \"channel\": \"email\", \"format\": \"nurture email\", \"max_chars\": 1800, \"message_angle\": \"reduce reporting friction\", \"cta\": \"Book diagnostic\", \"status\": \"draft\"}}];"
+        "jsCode": "return [{\"json\": {\"asset_id\": \"AST-001\", \"brief_id\": \"BRF-001\", \"evidence_ids\": \"SRC-001|SRC-002\", \"channel\": \"website\", \"media_type\": \"text\", \"title\": \"Audit-ready campaign ROI\", \"description\": \"Connect campaign activity to qualified demand\", \"caption\": \"Book an ROI diagnostic\", \"media_path\": \"\", \"user\": \"northstar_training\", \"max_chars\": 1800, \"message_angle\": \"audit-ready ROI\", \"cta\": \"Book diagnostic\", \"status\": \"draft\"}}, {\"json\": {\"asset_id\": \"AST-002\", \"brief_id\": \"BRF-001\", \"evidence_ids\": \"SRC-001|SRC-002\", \"channel\": \"linkedin\", \"media_type\": \"text\", \"title\": \"Prove campaign contribution\", \"description\": \"Evidence-led benchmark for SG marketing teams\", \"caption\": \"Read the benchmark\", \"media_path\": \"\", \"user\": \"northstar_training\", \"max_chars\": 1300, \"message_angle\": \"prove contribution\", \"cta\": \"Read benchmark\", \"status\": \"draft\"}}, {\"json\": {\"asset_id\": \"AST-003\", \"brief_id\": \"BRF-001\", \"evidence_ids\": \"SRC-001|SRC-002\", \"channel\": \"instagram\", \"media_type\": \"photos\", \"title\": \"Northstar campaign evidence\", \"description\": \"A visual summary of auditable campaign decisions\", \"caption\": \"Review the evidence\", \"media_path\": \"media/northstar-carousel-01.png\", \"user\": \"northstar_training\", \"max_chars\": 2200, \"message_angle\": \"show evidence\", \"cta\": \"Review evidence\", \"status\": \"draft\"}}, {\"json\": {\"asset_id\": \"AST-004\", \"brief_id\": \"BRF-001\", \"evidence_ids\": \"SRC-001|SRC-002\", \"channel\": \"youtube\", \"media_type\": \"video\", \"title\": \"Northstar evidence briefing\", \"description\": \"A short evidence-led campaign briefing\", \"caption\": \"Watch the evidence briefing\", \"media_path\": \"media/northstar-evidence-video.mp4\", \"user\": \"northstar_training\", \"max_chars\": 5000, \"message_angle\": \"explain the evidence\", \"cta\": \"Watch briefing\", \"status\": \"draft\"}}];"
       },
       "id": "n08-02",
       "name": "Approved Brief",
       "type": "n8n-nodes-base.code",
-      "typeVersion": 1,
+      "typeVersion": 2,
       "position": [
         500,
         220
@@ -27,59 +27,112 @@
     },
     {
       "parameters": {
-        "jsCode": "for (const x of items) { x.json.processed=true; x.json.processed_at=new Date().toISOString(); } return items;"
+        "jsCode": "for (const x of items) { const j=x.json; j.canonical_message=`${j.message_angle}: ${j.description}`; j.source_asset_id=j.asset_id; j.evidence_ids=String(j.evidence_ids||'').split('|').filter(Boolean); } return items;"
       },
       "id": "n08-03",
       "name": "Generate Canonical Copy",
       "type": "n8n-nodes-base.code",
-      "typeVersion": 1,
+      "typeVersion": 2,
       "position": [
         760,
         220
       ]
     },
     {
-      "parameters": {},
+      "parameters": {
+        "jsCode": "return items.map(x=>({json:{...x.json,platforms:x.json.channel==='website'?[]:[x.json.channel]}}));"
+      },
       "id": "n08-04",
       "name": "Split Channels",
-      "type": "n8n-nodes-base.noOp",
-      "typeVersion": 1,
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
       "position": [
         1020,
         220
       ]
     },
     {
-      "parameters": {},
+      "parameters": {
+        "jsCode": "for (const x of items) { const j=x.json; const paths={text:'/api/upload_text',photos:'/api/upload_photos',video:'/api/upload'}; j.media_type=String(j.media_type||'').toLowerCase(); j.api_path=j.channel==='website'?'':(paths[j.media_type]||''); j.caption=`${j.canonical_message}. ${j.cta}`; j.required_fields=j.channel==='website'?['brief_id','evidence_ids','title','description']:['brief_id','evidence_ids','user','platforms','title','caption','api_path']; if(j.media_type==='photos'||j.media_type==='video') j.required_fields.push('media_path'); j.validation_errors=j.required_fields.filter(k=>{const v=j[k]; return v===undefined||v===null||v===''||(Array.isArray(v)&&v.length===0);}); j.channel_fit=j.validation_errors.length===0&&j.caption.length<=Number(j.max_chars||500); j.status=j.channel_fit?(j.channel==='website'?'WEB_READY':'SOCIALPOST_READY'):'REWORK'; } return items;"
+      },
       "id": "n08-05",
       "name": "Apply Channel Rules",
-      "type": "n8n-nodes-base.noOp",
-      "typeVersion": 1,
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
       "position": [
-        240,
-        410
+        1280,
+        220
       ]
     },
     {
-      "parameters": {},
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "n08-06-condition",
+              "leftValue": "={{ $json.channel_fit === true }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
       "id": "n08-06",
-      "name": "Recombine Assets",
-      "type": "n8n-nodes-base.noOp",
-      "typeVersion": 1,
+      "name": "Channel Fit?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
       "position": [
-        500,
-        410
+        1540,
+        220
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "return [{json:{package_id:'PKG-001',status:'READY',assets:items.map(x=>x.json),asset_count:items.length}}];"
+      },
+      "id": "n08-07",
+      "name": "Recombine Assets",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1800,
+        150
       ]
     },
     {
       "parameters": {},
-      "id": "n08-07",
+      "id": "n08-08",
       "name": "Content Queue",
       "type": "n8n-nodes-base.noOp",
       "typeVersion": 1,
       "position": [
-        760,
-        410
+        2060,
+        150
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "for (const x of items) { x.json.status='REWORK'; x.json.terminal_node='Validation Failure'; } return items;"
+      },
+      "id": "n08-09",
+      "name": "Validation Failure",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1800,
+        330
       ]
     },
     {
@@ -148,7 +201,25 @@
       "main": [
         [
           {
+            "node": "Channel Fit?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Channel Fit?": {
+      "main": [
+        [
+          {
             "node": "Recombine Assets",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Validation Failure",
             "type": "main",
             "index": 0
           }
@@ -172,13 +243,9 @@
     "executionOrder": "v1",
     "saveManualExecutions": true
   },
-  "versionId": "eb10e7fc5b6ef1405895a89bbc9e8b77",
+  "versionId": "d11eeaa86317af75b736d20302a19936",
   "meta": {
     "templateCredsSetupCompleted": false
   },
-  "tags": [
-    "TGS-2025056988",
-    "digital-marketing",
-    "human-oversight"
-  ]
+  "tags": []
 }

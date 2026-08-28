@@ -1,10 +1,22 @@
 {
   "lab": 7,
-  "status": "PASS",
   "criteria": [
     "K3",
     "A4"
   ],
+  "terminal_node": "Brief Approval",
+  "evidence_file": "lab-07-evidence.json",
+  "representative_output": {
+    "brief_id": "BRF-001",
+    "campaign_id": "CMP-NS-001",
+    "audience_job": "Prove pipeline contribution",
+    "message": "Connect campaign activity to qualified demand",
+    "approved_claims": "measurable|auditable",
+    "evidence_ids": "SRC-001",
+    "tone": "confident-practical",
+    "cta": "Book an ROI diagnostic",
+    "prohibited_terms": "guaranteed|effortless"
+  },
   "metric": "contract_valid = required_fields_present AND evidence_ids_resolved",
   "acceptance": "The approved contract includes evidence IDs, approved claims, prohibited terms, CTA, version and contract hash.",
   "synthetic_data_only": true

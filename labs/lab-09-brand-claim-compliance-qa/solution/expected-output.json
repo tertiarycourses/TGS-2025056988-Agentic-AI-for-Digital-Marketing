@@ -1,10 +1,19 @@
 {
   "lab": 9,
-  "status": "PASS",
   "criteria": [
     "K5",
     "A5"
   ],
+  "terminal_node": "Reject Queue",
+  "evidence_file": "lab-09-evidence.json",
+  "representative_output": {
+    "rule_id": "BR-001",
+    "category": "claim",
+    "pattern": "guaranteed",
+    "severity": "high",
+    "action": "reject",
+    "owner": "Brand Lead"
+  },
   "metric": "qa_pass_rate = passed_rules / applicable_rules",
   "acceptance": "No high-severity asset reaches approval; every medium-risk finding has category, evidence, owner and disposition.",
   "synthetic_data_only": true

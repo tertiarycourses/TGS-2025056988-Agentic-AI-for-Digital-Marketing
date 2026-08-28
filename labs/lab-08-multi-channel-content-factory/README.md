@@ -1,20 +1,21 @@
 # Lab 08 — Multi-Channel Content Factory
 
 Course: Agentic AI for Digital Marketing (TGS-2025056988)  
-Version: v2.0  
+Version: v2.1  
 Criteria: K5, A5
 
 ## Objective
 
-Transform one approved brief into channel-specific assets.
+Transform one approved brief into channel-specific assets and a SocialPost-ready publishing contract.
 
 ## Connected campaign stage
 
 This lab continues the synthetic **Northstar Launch** campaign. Its output is designed to feed the next lab. Keep all supplied IDs unchanged so lineage remains visible end to end.
 
+
 ## What you will build
 
-Website, email, LinkedIn, Instagram and short-video drafts with shared message lineage.
+Website, email and SocialPost text/photo/video drafts with shared message lineage.
 
 ## Files in this folder
 
@@ -27,8 +28,15 @@ Website, email, LinkedIn, Instagram and short-video drafts with shared message l
 ## Input contract
 
 - `asset_id`
+- `brief_id`
+- `evidence_ids`
 - `channel`
-- `format`
+- `media_type`
+- `title`
+- `description`
+- `caption`
+- `media_path`
+- `user`
 - `max_chars`
 - `message_angle`
 - `cta`
@@ -41,15 +49,15 @@ Website, email, LinkedIn, Instagram and short-video drafts with shared message l
 3. Execute Generate Canonical Copy.
 4. Inspect the common message and evidence lineage.
 5. Run Split Channels and Apply Channel Rules.
-6. Verify LinkedIn, email and website outputs differ in format and CTA placement.
-7. Set a channel limit below output length and confirm the asset is flagged.
-8. Restore the limit and rerun.
-9. Inspect Recombine Assets for one asset per requested channel.
-10. Save generated-assets.json.
+6. Verify website, LinkedIn and Instagram outputs differ in format, CTA and media_type.
+7. Confirm every social asset has title, user, platform/channel and the media fields required by its SocialPost endpoint.
+8. Set a channel limit below output length and confirm the asset is flagged.
+9. Restore the limit and rerun.
+10. Save generated-assets.json for Lab 9 review.
 
 ## Verification
 
-One approved brief produces distinct channel assets; every asset retains brief_id, evidence_ids and validation status.
+One approved brief produces distinct channel assets; every social asset is endpoint-ready and retains brief_id, evidence_ids and validation status.
 
 Metric: `channel_fit = passed_length AND required_fields AND approved_claims_only`
 
@@ -57,7 +65,7 @@ Metric: `channel_fit = passed_length AND required_fields AND approved_claims_onl
 
 Risk: Copying identical text across channels ignores audience intent and platform constraints.
 
-Keep the workflow inactive while learning. Credentialed publishing nodes are disabled and point to a non-routable example domain. Use dry-run output unless a trainer explicitly authorises a sandbox social account.
+Keep the workflow inactive while learning. Credentialed publishing nodes remain disabled. Use dry-run output unless a trainer explicitly authorises a sandbox social account.
 
 ## Clean-up
 

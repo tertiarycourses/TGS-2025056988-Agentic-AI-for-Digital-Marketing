@@ -2,14 +2,14 @@
 
 **Course Code:** TGS-2025056988  
 **TSC:** Digital Marketing (WST-SNM-5042-1.1)  
-**Version:** v2.0 · 28 August 2026
+**Version:** v2.1 · 29 August 2026
 
 ## Document Version Control Record
 
 | Version | Effective Date | Change | Author |
 |---|---|---|---|
 | 1.0 | 17 July 2025 | Initial course release | Tertiary Infotech Academy |
-| 2.0 | 28 August 2026 | Rebuilt around n8n agentic marketing automation with 15 connected, human-supervised labs | Dr Alfred Ang |
+| 2.1 | 29 August 2026 | Integrated the live SocialPost API contract into n8n content, approval, publishing, orchestration and evidence labs; added platform-specific controls | Dr Alfred Ang |
 
 ## Learning Outcomes
 
@@ -25,7 +25,7 @@ This guide contains the detailed build procedures intentionally omitted from the
 
 ### Safe mode
 
-All workflows import inactive. Mock Excel workbooks contain synthetic data. Credentialed live-publishing nodes are disabled and point to an invalid example domain. Use dry-run mode unless the trainer authorises a sandbox account.
+All workflows import inactive and use synthetic data. The Lab 11 SocialPost HTTP node points to the real documented API but is disabled. Its local dry-run inspector sends nothing; enable one sandbox call only when the trainer authorises it.
 
 ### Human oversight
 
@@ -46,7 +46,8 @@ For each lab, retain the execution output, acceptance checklist and a short expl
 5. Open the mock workbook and read the READ ME and Data Dictionary sheets before mapping data.
 6. Run workflows manually with synthetic data first. Inspect INPUT and OUTPUT for every node before continuing.
 7. Keep all live credentials outside the lab folder. Never paste secrets into Code, Set or Sticky Note nodes.
-8. After each run, export only synthetic output into the evidence folder and complete the evidence checklist.
+8. For an authorised Lab 11 sandbox, store Authorization: Apikey <key> as an n8n Header Auth credential named SocialPost Training. Never export or screenshot the credential value.
+9. After each run, export only synthetic output into the evidence folder and complete the evidence checklist.
 
 ## Connected Campaign Architecture
 
@@ -408,15 +409,22 @@ If the check fails, stop the downstream branch, preserve the failed payload, rec
 ## Lab 08 — Multi-Channel Content Factory
 
 **Criteria:** K5, A5  
-**Objective:** Transform one approved brief into channel-specific assets.  
-**Output:** Website, email, LinkedIn, Instagram and short-video drafts with shared message lineage.  
+**Objective:** Transform one approved brief into channel-specific assets and a SocialPost-ready publishing contract.  
+**Output:** Website, email and SocialPost text/photo/video drafts with shared message lineage.  
 **Mock data:** `labs/lab-08-*/data/content_matrix.xlsx`  
 
 ### Input contract
 
 - `asset_id`
+- `brief_id`
+- `evidence_ids`
 - `channel`
-- `format`
+- `media_type`
+- `title`
+- `description`
+- `caption`
+- `media_path`
+- `user`
 - `max_chars`
 - `message_angle`
 - `cta`
@@ -429,15 +437,15 @@ If the check fails, stop the downstream branch, preserve the failed payload, rec
 3. Execute Generate Canonical Copy.
 4. Inspect the common message and evidence lineage.
 5. Run Split Channels and Apply Channel Rules.
-6. Verify LinkedIn, email and website outputs differ in format and CTA placement.
-7. Set a channel limit below output length and confirm the asset is flagged.
-8. Restore the limit and rerun.
-9. Inspect Recombine Assets for one asset per requested channel.
-10. Save generated-assets.json.
+6. Verify website, LinkedIn and Instagram outputs differ in format, CTA and media_type.
+7. Confirm every social asset has title, user, platform/channel and the media fields required by its SocialPost endpoint.
+8. Set a channel limit below output length and confirm the asset is flagged.
+9. Restore the limit and rerun.
+10. Save generated-assets.json for Lab 9 review.
 
 ### Verification
 
-One approved brief produces distinct channel assets; every asset retains brief_id, evidence_ids and validation status.
+One approved brief produces distinct channel assets; every social asset is endpoint-ready and retains brief_id, evidence_ids and validation status.
 
 Metric: `channel_fit = passed_length AND required_fields AND approved_claims_only`
 
@@ -505,15 +513,20 @@ If the check fails, stop the downstream branch, preserve the failed payload, rec
 ## Lab 10 — Human Approval State Machine
 
 **Criteria:** A5  
-**Objective:** Pause automation until an accountable reviewer approves the exact payload.  
-**Output:** An approval request, tamper-evident decision record and state transition.  
+**Objective:** Pause automation until an accountable reviewer approves the exact SocialPost request payload.  
+**Output:** An approval request, tamper-evident decision record and state transition bound to endpoint, user and platforms.  
 **Mock data:** `labs/lab-10-*/data/approval_queue.xlsx`  
 
 ### Input contract
 
 - `approval_id`
 - `asset_id`
-- `payload_hash`
+- `api_path`
+- `user`
+- `platforms`
+- `title`
+- `caption`
+- `decision_hash`
 - `risk`
 - `reviewer`
 - `status`
@@ -523,19 +536,19 @@ If the check fails, stop the downstream branch, preserve the failed payload, rec
 ### Detailed step-by-step procedure
 
 1. Import workflow.json and open approval_queue.xlsx.
-2. Load the QA-passed asset from Lab 9.
-3. Execute Create Approval Record and note payload_hash.
-4. Open the simulated approval form URL shown by the workflow.
-5. Approve the asset with a reviewer comment.
-6. Confirm Wait for Decision resumes.
-7. Change the payload after approval and rerun Verify Payload Hash.
-8. Confirm the workflow escalates the mismatch.
-9. Restore the approved payload and rerun.
-10. Save approval-record.json with reviewer, timestamp and hash.
+2. Load the QA-passed AST-002 asset from Lab 9.
+3. Confirm api_path is /api/upload_text and platforms is the exact linkedin list used in Lab 11.
+4. Execute Create Approval Record and note current_payload_hash.
+5. Confirm the canonical hash covers asset_id, api_path, user, platform list, title and caption.
+6. The supplied Wait for Decision node is disabled for deterministic dry-run inspection; enable and configure its test webhook only when practising a live reviewer callback.
+7. Run Verify Payload Hash and confirm the APPROVED fixture reaches Approved with approval_verified=true.
+8. Change the title without changing decision_hash and rerun Verify Payload Hash.
+9. Confirm the workflow routes the mismatch to Escalated and never reaches Approved.
+10. Restore the approved payload and save approval-record.json with reviewer, timestamp, canonical payload and decision hash.
 
 ### Verification
 
-Only APPROVED records with a matching payload hash proceed; rejected and changed payloads cannot publish.
+Only APPROVED records with a matching SocialPost payload hash proceed; rejected, retargeted or changed payloads cannot publish.
 
 Metric: `approval_integrity = decision_hash == current_payload_hash`
 
@@ -552,46 +565,60 @@ If the check fails, stop the downstream branch, preserve the failed payload, rec
 - `evidence/checklist.md` completed.
 - Learner can explain the decision rule and human oversight point.
 
-## Lab 11 — Social Publishing Dry-Run & Idempotency
+## Lab 11 — SocialPost API Publishing & Idempotency
 
 **Criteria:** K5, A5  
-**Objective:** Build safe per-channel publication payloads and prevent duplicates.  
-**Output:** Validated dry-run payloads for LinkedIn, Instagram and webhook-based channels.  
+**Objective:** Map approved content into the SocialPost API and prevent duplicate sends.  
+**Output:** Validated SocialPost multipart request; live HTTP node disabled.  
 **Mock data:** `labs/lab-11-*/data/publishing_queue.xlsx`  
 
 ### Input contract
 
 - `publish_id`
 - `asset_id`
-- `channel`
+- `media_type`
+- `api_path`
+- `user`
+- `platforms`
+- `title`
+- `description`
+- `caption`
+- `media_path`
 - `scheduled_at`
 - `idempotency_key`
 - `approval_id`
+- `decision_hash`
+- `approval_verified`
+- `credential_ready`
 - `dry_run`
 - `status`
 
 ### Detailed step-by-step procedure
 
-1. Import workflow.json and keep Live Publisher disabled.
-2. Open publishing_queue.xlsx and load PUB-001.
-3. Execute Build Channel Payload.
-4. Inspect the target account placeholder, media, text and scheduled time.
-5. Run Idempotency Store and Already Published?.
-6. Execute the dry-run branch and inspect the simulated 202 response.
-7. Execute the same publish_id again.
-8. Confirm the duplicate branch prevents a second publication.
-9. Change channel to instagram and inspect channel-specific validation.
-10. Save publication-log.json.
+1. Import workflow.json and keep all three SocialPost API nodes disabled.
+2. Open publishing_queue.xlsx and load both PUB-001 rows to exercise the in-batch duplicate gate.
+3. Execute Build SocialPost Form Data and verify api_url resolves to https://socialmediapost.tertiaryinfotech.com/api/upload_text.
+4. Inspect the multipart map: user, one exact platform[] value, title and caption; no API key appears in workflow JSON.
+5. Confirm each queue item contains exactly one approved platform; create one queue item per platform so repeated multi-platform sends remain approval-bound and idempotent.
+6. Confirm current_payload_hash matches the decision_hash from Lab 10 and approval_verified remains true.
+7. In n8n Credentials, create a Header Auth credential named SocialPost Training with header Authorization and value Apikey followed by the sandbox key; do not paste the key into any node.
+8. Select that credential on Text API (Disabled), Photo API (Disabled) and Video API (Disabled), but leave all nodes disabled.
+9. Run Idempotency Store and Already Published?; confirm the second PUB-001 row routes to Dead Letter as a duplicate.
+10. Confirm the first row reaches Dry Run? and routes to SocialPost Dry-Run Inspect because dry_run=true; no HTTP node executes.
+11. For production, replace workflow static data with a durable n8n Data Table or database-backed unique key on idempotency_key.
+12. Only with trainer authorisation, set dry_run=false and credential_ready=true, enable exactly the matching media node for one sandbox post, and confirm Publish Succeeded? receives a real 2xx full response before the key is marked.
+13. Leave the media node disabled deliberately once and confirm pass-through routes to Dead Letter without consuming the idempotency key; repeat with a simulated non-2xx/partial-failure result.
+14. Save publication-log.json with publish_id, approval_id, current_payload_hash, terminal node, HTTP status and raw response.
 
 ### Verification
 
-Dry-run payload is channel-valid, approval-linked and idempotent; the credentialed live publisher remains disabled by default.
+The inspected request uses the documented SocialPost endpoint and Apikey credential pattern, remains approval-linked and idempotent, and sends nothing unless the trainer explicitly enables the sandbox node.
 
 Metric: `duplicate_rate = duplicate_attempts / publish_attempts`
 
 ### Failure and control
 
-Risk: Retries can publish the same content multiple times or to the wrong account.
+Risk: Retries can publish the same approved content more than once or to an unapproved SocialPost profile.
 
 If the check fails, stop the downstream branch, preserve the failed payload, record the error and owner, correct the contract or policy issue, then rerun from the failed stage. Never bypass approval to make the execution appear complete.
 
@@ -628,14 +655,14 @@ If the check fails, stop the downstream branch, preserve the failed payload, rec
 4. Run CMP-NS-001 in dry-run mode.
 5. Inspect Run Ledger after every stage.
 6. Force QA Sub-workflow to return rejected.
-7. Confirm Approval and Publishing do not execute.
-8. Restore the valid asset and approve it.
-9. Confirm the dry-run publisher executes once.
+7. Confirm Approval and SocialPost publishing do not execute.
+8. Restore the valid asset and approve its exact api_path, user, platforms and payload hash.
+9. Confirm the SocialPost dry-run inspector executes once and the disabled live node is not called.
 10. Export the complete run ledger and final state.
 
 ### Verification
 
-A successful run reaches PUBLISHED_DRY_RUN only after research, strategy, content, QA and approval succeed; failures stop downstream execution.
+A successful run reaches SOCIALPOST_REQUEST_INSPECTED only after research, strategy, content, QA and approval succeed; failures stop downstream execution.
 
 Metric: `stage_success_rate = successful_stages / attempted_stages`
 
@@ -674,7 +701,7 @@ If the check fails, stop the downstream branch, preserve the failed payload, rec
 ### Detailed step-by-step procedure
 
 1. Import workflow.json and open performance_events.xlsx.
-2. Load the sample events.
+2. Load the supplied fixture derived from a retained SocialPost per-platform result; do not call an undocumented analytics endpoint.
 3. Execute Normalise Schema.
 4. Confirm timestamps use ISO 8601 with offset.
 5. Duplicate EVT-001 and run Deduplicate Event IDs.
@@ -812,8 +839,9 @@ A capstone run is complete only when:
 - Strategy decisions map to objectives, owners, KPIs and review dates.
 - Channel assets retain the approved brief and evidence IDs.
 - QA has no unresolved high-severity issue.
-- The human decision matches the exact payload hash.
-- Publishing runs in dry-run mode or an authorised sandbox and is idempotent.
+- The human decision matches the exact SocialPost endpoint, user, platforms and payload hash.
+- The Lab 11 request uses the documented SocialPost endpoint and multipart field names.
+- Publishing runs in local dry-run inspection or an authorised sandbox and is idempotent.
 - The performance ledger uses valid campaign, asset and event IDs.
 - Optimisation creates a reviewed next-cycle experiment; it does not mutate a live campaign autonomously.
 
@@ -839,12 +867,17 @@ Use the test webhook URL during a manual run, keep the execution open, and submi
 
 Confirm publish_id and idempotency_key are stable across retries and check the publication ledger before the publisher.
 
+### SocialPost returns an HTTP error
+
+Verify media_type selected the correct endpoint, the Header Auth credential begins with Apikey, user/profile and platform[] are authorised, and the request uses multipart form data. Preserve the raw response before changing the payload.
+
 ### Metrics differ from Excel
 
 Confirm the same grain, gross-margin assumption, period and zero-division rule are used in both calculations.
 
 ## References
 
+- SocialPost public API examples (verified 29 August 2026): https://socialmediapost.tertiaryinfotech.com/
 - n8n documentation: https://docs.n8n.io/
 - Course page: https://www.tertiarycourses.com.sg/wsq-agentic-ai-for-digital-marketing.html
 - Legacy course deck and the two supplied ebooks in `reference/`.

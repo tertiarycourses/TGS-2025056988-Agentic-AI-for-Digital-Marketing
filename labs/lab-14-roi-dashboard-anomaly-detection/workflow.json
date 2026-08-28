@@ -194,13 +194,9 @@
     "executionOrder": "v1",
     "saveManualExecutions": true
   },
-  "versionId": "e3ff87c619431292c72275e1fa1e7120",
+  "versionId": "9f78321e92bb8272197825e15d1fa973",
   "meta": {
     "templateCredsSetupCompleted": false
   },
-  "tags": [
-    "TGS-2025056988",
-    "digital-marketing",
-    "human-oversight"
-  ]
+  "tags": []
 }

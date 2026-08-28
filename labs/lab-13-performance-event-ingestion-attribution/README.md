@@ -1,7 +1,7 @@
 # Lab 13 — Performance Event Ingestion & Attribution
 
 Course: Agentic AI for Digital Marketing (TGS-2025056988)  
-Version: v2.0  
+Version: v2.1  
 Criteria: K2, K4, A3
 
 ## Objective
@@ -11,6 +11,7 @@ Normalise channel events into a campaign performance contract.
 ## Connected campaign stage
 
 This lab continues the synthetic **Northstar Launch** campaign. Its output is designed to feed the next lab. Keep all supplied IDs unchanged so lineage remains visible end to end.
+
 
 ## What you will build
 
@@ -39,7 +40,7 @@ A deduplicated fact table joined by campaign, asset, channel and event time.
 ## Detailed procedure
 
 1. Import workflow.json and open performance_events.xlsx.
-2. Load the sample events.
+2. Load the supplied fixture derived from a retained SocialPost per-platform result; do not call an undocumented analytics endpoint.
 3. Execute Normalise Schema.
 4. Confirm timestamps use ISO 8601 with offset.
 5. Duplicate EVT-001 and run Deduplicate Event IDs.
@@ -59,7 +60,7 @@ Metric: `data_quality = valid_unique_events / received_events`
 
 Risk: Inconsistent IDs and time zones can misattribute outcomes.
 
-Keep the workflow inactive while learning. Credentialed publishing nodes are disabled and point to a non-routable example domain. Use dry-run output unless a trainer explicitly authorises a sandbox social account.
+Keep the workflow inactive while learning. Credentialed publishing nodes remain disabled. Use dry-run output unless a trainer explicitly authorises a sandbox social account.
 
 ## Clean-up
 

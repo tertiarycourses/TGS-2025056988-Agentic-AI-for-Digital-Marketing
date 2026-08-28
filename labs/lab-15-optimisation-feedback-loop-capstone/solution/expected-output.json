@@ -1,11 +1,23 @@
 {
   "lab": 15,
-  "status": "PASS",
   "criteria": [
     "A3",
     "A4",
     "A5"
   ],
+  "terminal_node": "Cycle Audit",
+  "evidence_file": "lab-15-evidence.json",
+  "representative_output": {
+    "action_id": "OPT-001",
+    "finding": "Email ROI exceeds baseline with stable unsubscribe rate",
+    "evidence": "DASH-2026-W37",
+    "proposed_change": "Increase email test allocation by 10%",
+    "expected_impact": 0.08,
+    "risk": "medium",
+    "owner": "Aisha",
+    "decision": "PENDING",
+    "next_review": "2026-09-25"
+  },
   "metric": "realised_lift = (new_result\u2212baseline)/baseline",
   "acceptance": "No optimisation changes a live campaign automatically; approved recommendations create a measured next-cycle experiment with full lineage.",
   "synthetic_data_only": true

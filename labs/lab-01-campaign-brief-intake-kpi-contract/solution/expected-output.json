@@ -1,10 +1,21 @@
 {
   "lab": 1,
-  "status": "PASS",
   "criteria": [
     "A1",
     "A2"
   ],
+  "terminal_node": "Output Contract",
+  "evidence_file": "lab-01-evidence.json",
+  "representative_output": {
+    "campaign_id": "CMP-NS-001",
+    "objective": "Generate qualified demo requests",
+    "audience": "SG SME marketing leaders",
+    "budget_sgd": 18000,
+    "start_date": "2026-09-01",
+    "end_date": "2026-10-31",
+    "owner": "Aisha",
+    "risk_tier": "medium"
+  },
   "metric": "brief_completeness = populated_required_fields / 8",
   "acceptance": "Output contains campaign_id CMP-NS-001, at least three KPI contracts, one owner per KPI and a human-review flag.",
   "synthetic_data_only": true

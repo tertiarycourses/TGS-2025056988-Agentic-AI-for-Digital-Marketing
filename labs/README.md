@@ -12,7 +12,7 @@ The 15 labs form one connected, human-supervised campaign automation.
 - [Lab 08 — Multi-Channel Content Factory](lab-08-multi-channel-content-factory/README.md)
 - [Lab 09 — Brand, Claim & Compliance QA](lab-09-brand-claim-compliance-qa/README.md)
 - [Lab 10 — Human Approval State Machine](lab-10-human-approval-state-machine/README.md)
-- [Lab 11 — Social Publishing Dry-Run & Idempotency](lab-11-social-publishing-dry-run-idempotency/README.md)
+- [Lab 11 — SocialPost API Publishing & Idempotency](lab-11-socialpost-api-publishing-idempotency/README.md)
 - [Lab 12 — End-to-End Campaign Orchestrator](lab-12-end-to-end-campaign-orchestrator/README.md)
 - [Lab 13 — Performance Event Ingestion & Attribution](lab-13-performance-event-ingestion-attribution/README.md)
 - [Lab 14 — ROI Dashboard & Anomaly Detection](lab-14-roi-dashboard-anomaly-detection/README.md)

@@ -1,10 +1,21 @@
 {
   "lab": 5,
-  "status": "PASS",
   "criteria": [
     "K4",
     "A3"
   ],
+  "terminal_node": "Budget Decision",
+  "evidence_file": "lab-05-evidence.json",
+  "representative_output": {
+    "channel": "LinkedIn",
+    "spend": 6000,
+    "impressions": 180000,
+    "clicks": 2700,
+    "leads": 135,
+    "customers": 18,
+    "revenue": 27000,
+    "gross_margin": 0.68
+  },
   "metric": "CAC = spend/customers; ROAS = revenue/spend; ROI = (revenue\u00d7margin\u2212spend)/spend",
   "acceptance": "Calculated metrics match Excel formulas, low-volume scenarios are flagged and no allocation proceeds without reviewer_decision.",
   "synthetic_data_only": true

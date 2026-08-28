@@ -1,0 +1,834 @@
+{
+  "name": "TGS-2025056988 Lab 11 - SocialPost API Publishing & Idempotency",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "n11-01",
+      "name": "Manual Trigger",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        240,
+        260
+      ]
+    },
+    {
+      "parameters": {
+        "inputSource": "passthrough"
+      },
+      "id": "n11-00",
+      "name": "Sub-workflow Input",
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        500,
+        100
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "return [{\"json\": {\"publish_id\": \"PUB-001\", \"asset_id\": \"AST-002\", \"media_type\": \"text\", \"api_path\": \"/api/upload_text\", \"user\": \"northstar_training\", \"platforms\": \"linkedin\", \"title\": \"Prove campaign contribution\", \"description\": \"Evidence-led benchmark for SG marketing teams\", \"caption\": \"Read the benchmark\", \"media_path\": \"\", \"scheduled_at\": \"2026-09-10T09:00:00+08:00\", \"idempotency_key\": \"CMP-NS-001:AST-002:v2\", \"approval_id\": \"APR-001\", \"decision_hash\": \"419ad8f34f7501f8cfe997939468cc5423dff20c1668584f55c1d830c517ac36\", \"approval_verified\": true, \"credential_ready\": false, \"dry_run\": true, \"status\": \"READY\"}}, {\"json\": {\"publish_id\": \"PUB-001\", \"asset_id\": \"AST-002\", \"media_type\": \"text\", \"api_path\": \"/api/upload_text\", \"user\": \"northstar_training\", \"platforms\": \"linkedin\", \"title\": \"Prove campaign contribution\", \"description\": \"Evidence-led benchmark for SG marketing teams\", \"caption\": \"Read the benchmark\", \"media_path\": \"\", \"scheduled_at\": \"2026-09-10T09:00:00+08:00\", \"idempotency_key\": \"CMP-NS-001:AST-002:v2\", \"approval_id\": \"APR-001\", \"decision_hash\": \"419ad8f34f7501f8cfe997939468cc5423dff20c1668584f55c1d830c517ac36\", \"approval_verified\": true, \"credential_ready\": false, \"dry_run\": true, \"status\": \"READY\"}}];"
+      },
+      "id": "n11-02",
+      "name": "Approved Social Asset",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        500,
+        260
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "function sha256(ascii){const rr=(v,a)=>(v>>>a)|(v<<(32-a));const mp=Math.pow,mw=mp(2,32);let i,j,res='',words=[],bit=ascii.length*8,hash=sha256.h=sha256.h||[],k=sha256.k=sha256.k||[],pc=k.length,comp={};for(let c=2;pc<64;c++){if(!comp[c]){for(i=0;i<313;i+=c)comp[i]=c;hash[pc]=(mp(c,.5)*mw)|0;k[pc++]=(mp(c,1/3)*mw)|0;}}ascii+='\\x80';while(ascii.length%64-56)ascii+='\\x00';for(i=0;i<ascii.length;i++){j=ascii.charCodeAt(i);if(j>>8)throw new Error('SHA-256 helper accepts ASCII canonical payloads only');words[i>>2]|=j<<((3-i)%4)*8;}words[words.length]=(bit/mw)|0;words[words.length]=bit;for(j=0;j<words.length;){let w=words.slice(j,j+=16),old=hash;hash=hash.slice(0,8);for(i=0;i<64;i++){let w15=w[i-15],w2=w[i-2],a=hash[0],e=hash[4],t1=hash[7]+(rr(e,6)^rr(e,11)^rr(e,25))+((e&hash[5])^((~e)&hash[6]))+k[i]+(w[i]=(i<16)?w[i]:((w[i-16]+(rr(w15,7)^rr(w15,18)^(w15>>>3))+w[i-7]+(rr(w2,17)^rr(w2,19)^(w2>>>10)))|0)),t2=(rr(a,2)^rr(a,13)^rr(a,22))+((a&hash[1])^(a&hash[2])^(hash[1]&hash[2]));hash=[(t1+t2)|0,a,hash[1],hash[2],(hash[3]+t1)|0,e,hash[5],hash[6]];}for(i=0;i<8;i++)hash[i]=(hash[i]+old[i])|0;}for(i=0;i<8;i++)for(j=3;j+1;j--){let b=(hash[i]>>(j*8))&255;res+=(b<16?'0':'')+b.toString(16);}return res;}const base='https://socialmediapost.tertiaryinfotech.com'; const paths={video:'/api/upload',photos:'/api/upload_photos',text:'/api/upload_text'}; for (const x of items) { const j=x.json; j.media_type=String(j.media_type||'').toLowerCase(); j.platforms=String(j.platforms||'').split('|').map(v=>v.trim()).filter(Boolean); j.api_path=paths[j.media_type]||''; j.api_url=j.api_path?base+j.api_path:''; j.multipart_fields={user:j.user,'platform[]':j.platforms[0],title:j.title}; if(j.media_type==='text') j.multipart_fields.caption=j.caption||''; if(j.media_type==='photos'){j.multipart_fields.description=j.description||''; j.multipart_fields['photos[]']=j.media_path||'';} if(j.media_type==='video') j.multipart_fields.video=j.media_path||''; const canonical={asset_id:j.asset_id,api_path:j.api_path,user:j.user,platforms:j.platforms,title:j.title,caption:j.caption}; j.current_payload_hash=sha256(JSON.stringify(canonical)); const mediaOk=j.media_type==='text'||((j.media_type==='photos'||j.media_type==='video')&&Boolean(j.media_path)); j.request_valid=Boolean(j.publish_id&&j.asset_id&&j.api_path&&j.user&&j.platforms.length===1&&j.title&&j.idempotency_key&&mediaOk); j.approval_verified=j.approval_verified===true&&j.decision_hash===j.current_payload_hash; j.authorization_format='Apikey <stored in n8n Header Auth credential>'; } return items;"
+      },
+      "id": "n11-03",
+      "name": "Build SocialPost Form Data",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        760,
+        220
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "for (const x of items) { const j=x.json; j.credential_ready=j.credential_ready===true; j.credential_gate_pass=j.dry_run===true||j.credential_ready; } return items;"
+      },
+      "id": "n11-04",
+      "name": "Credential Check",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1020,
+        220
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const store=$getWorkflowStaticData('global'); store.published=store.published||{}; const seen=new Set(); for (const x of items) { const j=x.json; j.duplicate=Boolean(store.published[j.idempotency_key])||seen.has(j.idempotency_key); seen.add(j.idempotency_key); j.idempotency_backend='workflow static data for training; use durable Data Table or database in production'; } return items;"
+      },
+      "id": "n11-05",
+      "name": "Idempotency Store",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1280,
+        220
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "n11-06-condition",
+              "leftValue": "={{ $json.duplicate === true }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "n11-06",
+      "name": "Already Published?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1540,
+        220
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "n11-07-condition",
+              "leftValue": "={{ $json.approval_verified === true && $json.request_valid === true && $json.status === 'READY' }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "n11-07",
+      "name": "Approval & Request Valid?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1800,
+        140
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "n11-08-condition",
+              "leftValue": "={{ $json.dry_run === true }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "n11-08",
+      "name": "Dry Run?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        2060,
+        140
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "for (const x of items) { const j=x.json; j.terminal_node='SocialPost Dry-Run Inspect'; j.send_attempted=false; j.request_summary={method:'POST',url:j.api_url,fields:Object.keys(j.multipart_fields),approval_id:j.approval_id,current_payload_hash:j.current_payload_hash,idempotency_key:j.idempotency_key}; j.status='DRY_RUN_INSPECTED'; } return items;"
+      },
+      "id": "n11-09",
+      "name": "SocialPost Dry-Run Inspect",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2320,
+        60
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "n11-10-condition",
+              "leftValue": "={{ $json.credential_ready === true }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "n11-10",
+      "name": "Credential Ready?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        2320,
+        220
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "n11-11-condition",
+              "leftValue": "={{ $json.media_type === 'text' }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "n11-11",
+      "name": "Is Text?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        2580,
+        220
+      ]
+    },
+    {
+      "parameters": {
+        "url": "https://socialmediapost.tertiaryinfotech.com/api/upload_text",
+        "method": "POST",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "contentType": "multipart-form-data",
+        "bodyParameters": {
+          "parameters": [
+            {
+              "parameterType": "formData",
+              "name": "user",
+              "value": "={{ $json.user }}"
+            },
+            {
+              "parameterType": "formData",
+              "name": "platform[]",
+              "value": "={{ $json.platforms[0] }}"
+            },
+            {
+              "parameterType": "formData",
+              "name": "title",
+              "value": "={{ $json.title }}"
+            },
+            {
+              "parameterType": "formData",
+              "name": "caption",
+              "value": "={{ $json.caption }}"
+            }
+          ]
+        },
+        "options": {
+          "response": {
+            "response": {
+              "fullResponse": true,
+              "neverError": false,
+              "responseFormat": "json"
+            }
+          }
+        }
+      },
+      "id": "n11-12",
+      "name": "Text API (Disabled)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        2840,
+        120
+      ],
+      "disabled": true,
+      "continueOnFail": true
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "n11-13-condition",
+              "leftValue": "={{ $json.media_type === 'photos' }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "n11-13",
+      "name": "Is Photos?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        2840,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "url": "https://socialmediapost.tertiaryinfotech.com/api/upload_photos",
+        "method": "POST",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "contentType": "multipart-form-data",
+        "bodyParameters": {
+          "parameters": [
+            {
+              "parameterType": "formData",
+              "name": "user",
+              "value": "={{ $json.user }}"
+            },
+            {
+              "parameterType": "formData",
+              "name": "platform[]",
+              "value": "={{ $json.platforms[0] }}"
+            },
+            {
+              "parameterType": "formData",
+              "name": "title",
+              "value": "={{ $json.title }}"
+            },
+            {
+              "parameterType": "formBinaryData",
+              "name": "photos[]",
+              "inputDataFieldName": "photos"
+            },
+            {
+              "parameterType": "formData",
+              "name": "description",
+              "value": "={{ $json.description }}"
+            }
+          ]
+        },
+        "options": {
+          "response": {
+            "response": {
+              "fullResponse": true,
+              "neverError": false,
+              "responseFormat": "json"
+            }
+          }
+        }
+      },
+      "id": "n11-14",
+      "name": "Photo API (Disabled)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        3100,
+        260
+      ],
+      "disabled": true,
+      "continueOnFail": true
+    },
+    {
+      "parameters": {
+        "url": "https://socialmediapost.tertiaryinfotech.com/api/upload",
+        "method": "POST",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "contentType": "multipart-form-data",
+        "bodyParameters": {
+          "parameters": [
+            {
+              "parameterType": "formData",
+              "name": "user",
+              "value": "={{ $json.user }}"
+            },
+            {
+              "parameterType": "formData",
+              "name": "platform[]",
+              "value": "={{ $json.platforms[0] }}"
+            },
+            {
+              "parameterType": "formData",
+              "name": "title",
+              "value": "={{ $json.title }}"
+            },
+            {
+              "parameterType": "formBinaryData",
+              "name": "video",
+              "inputDataFieldName": "video"
+            }
+          ]
+        },
+        "options": {
+          "response": {
+            "response": {
+              "fullResponse": true,
+              "neverError": false,
+              "responseFormat": "json"
+            }
+          }
+        }
+      },
+      "id": "n11-15",
+      "name": "Video API (Disabled)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        3100,
+        420
+      ],
+      "disabled": true,
+      "continueOnFail": true
+    },
+    {
+      "parameters": {
+        "jsCode": "for (const x of items) { const j=x.json; const status=Number(j.statusCode||0); const raw=j.body??null; const rows=Array.isArray(raw)?raw:(Array.isArray(raw?.results)?raw.results:[]); const partial_failure=rows.some(r=>r?.success===false||['failed','error'].includes(String(r?.status||'').toLowerCase())); j.response_received=status>0; j.send_attempted=j.response_received; j.publish_success=status>=200&&status<300&&raw!==null&&!j.error&&!partial_failure; j.platform_result={http_status:status||null,raw_response:raw,partial_failure}; } return items;"
+      },
+      "id": "n11-16",
+      "name": "Capture Platform Results",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        3360,
+        220
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "n11-17-condition",
+              "leftValue": "={{ $json.publish_success === true }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "n11-17",
+      "name": "Publish Succeeded?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        3620,
+        220
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const store=$getWorkflowStaticData('global'); store.published=store.published||{}; for (const x of items) { const j=x.json; if(j.publish_success===true&&!j.duplicate) store.published[j.idempotency_key]={publish_id:j.publish_id,recorded_at:new Date().toISOString(),http_status:j.platform_result.http_status}; } return items;"
+      },
+      "id": "n11-18",
+      "name": "Mark Idempotency Key",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        3880,
+        140
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "for (const x of items) { x.json.terminal_node=x.json.terminal_node||'Publication Log'; x.json.final_status=x.json.publish_success===true?'PUBLISHED':'INSPECTED'; } return items;"
+      },
+      "id": "n11-19",
+      "name": "Publication Log",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        4140,
+        140
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "for (const x of items) { x.json.terminal_node='Dead Letter'; x.json.final_status='BLOCKED'; x.json.block_reason=x.json.duplicate?'DUPLICATE':(!x.json.approval_verified?'APPROVAL_MISMATCH':(!x.json.request_valid?'INVALID_REQUEST':(x.json.response_received===false?'NO_HTTP_RESPONSE':(x.json.publish_success===false?'PUBLISH_FAILED':'CREDENTIAL_NOT_READY')))); } return items;"
+      },
+      "id": "n11-20",
+      "name": "Dead Letter",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        3880,
+        420
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Lab 11: SocialPost API Publishing & Idempotency\n\n**Input:** data/publishing_queue.xlsx\n\n**Metric:** duplicate_rate = duplicate_attempts / publish_attempts\n\n**Risk:** Retries can publish the same approved content more than once or to an unapproved SocialPost profile\n\nDRY RUN: credentialed publishing stays disabled until a trainer authorises live credentials.",
+        "height": 150,
+        "width": 900
+      },
+      "id": "note-11",
+      "name": "Lab Contract",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        240,
+        20
+      ]
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Manual Trigger": {
+      "main": [
+        [
+          {
+            "node": "Approved Social Asset",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Approved Social Asset": {
+      "main": [
+        [
+          {
+            "node": "Build SocialPost Form Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build SocialPost Form Data": {
+      "main": [
+        [
+          {
+            "node": "Credential Check",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Credential Check": {
+      "main": [
+        [
+          {
+            "node": "Idempotency Store",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Idempotency Store": {
+      "main": [
+        [
+          {
+            "node": "Already Published?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Already Published?": {
+      "main": [
+        [
+          {
+            "node": "Dead Letter",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Approval & Request Valid?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Approval & Request Valid?": {
+      "main": [
+        [
+          {
+            "node": "Dry Run?",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Dead Letter",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Dry Run?": {
+      "main": [
+        [
+          {
+            "node": "SocialPost Dry-Run Inspect",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Credential Ready?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "SocialPost Dry-Run Inspect": {
+      "main": [
+        [
+          {
+            "node": "Publication Log",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Credential Ready?": {
+      "main": [
+        [
+          {
+            "node": "Is Text?",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Dead Letter",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Is Text?": {
+      "main": [
+        [
+          {
+            "node": "Text API (Disabled)",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Is Photos?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Is Photos?": {
+      "main": [
+        [
+          {
+            "node": "Photo API (Disabled)",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Video API (Disabled)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Text API (Disabled)": {
+      "main": [
+        [
+          {
+            "node": "Capture Platform Results",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Photo API (Disabled)": {
+      "main": [
+        [
+          {
+            "node": "Capture Platform Results",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Video API (Disabled)": {
+      "main": [
+        [
+          {
+            "node": "Capture Platform Results",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Capture Platform Results": {
+      "main": [
+        [
+          {
+            "node": "Publish Succeeded?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Publish Succeeded?": {
+      "main": [
+        [
+          {
+            "node": "Mark Idempotency Key",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Dead Letter",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Mark Idempotency Key": {
+      "main": [
+        [
+          {
+            "node": "Publication Log",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Sub-workflow Input": {
+      "main": [
+        [
+          {
+            "node": "Build SocialPost Form Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "saveManualExecutions": true
+  },
+  "versionId": "18fb2e75d2b7392a444b9f653c34a36e",
+  "meta": {
+    "templateCredsSetupCompleted": false
+  },
+  "tags": []
+}

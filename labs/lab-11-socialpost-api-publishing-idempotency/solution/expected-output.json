@@ -1,0 +1,38 @@
+{
+  "lab": 11,
+  "criteria": [
+    "K5",
+    "A5"
+  ],
+  "terminal_node": "SocialPost Dry-Run Inspect",
+  "evidence_file": "publication-log.json",
+  "representative_output": {
+    "publish_id": "PUB-001",
+    "asset_id": "AST-002",
+    "media_type": "text",
+    "api_path": "/api/upload_text",
+    "user": "northstar_training",
+    "platforms": "linkedin",
+    "title": "Prove campaign contribution",
+    "description": "Evidence-led benchmark for SG marketing teams",
+    "caption": "Read the benchmark",
+    "media_path": "",
+    "scheduled_at": "2026-09-10T09:00:00+08:00",
+    "idempotency_key": "CMP-NS-001:AST-002:v2",
+    "approval_id": "APR-001",
+    "decision_hash": "419ad8f34f7501f8cfe997939468cc5423dff20c1668584f55c1d830c517ac36",
+    "approval_verified": true,
+    "credential_ready": false,
+    "dry_run": true,
+    "status": "READY",
+    "api_url": "https://socialmediapost.tertiaryinfotech.com/api/upload_text",
+    "duplicate": false,
+    "request_valid": true,
+    "terminal_node": "SocialPost Dry-Run Inspect",
+    "final_status": "INSPECTED",
+    "send_attempted": false
+  },
+  "metric": "duplicate_rate = duplicate_attempts / publish_attempts",
+  "acceptance": "The inspected request uses the documented SocialPost endpoint and Apikey credential pattern, remains approval-linked and idempotent, and sends nothing unless the trainer explicitly enables the sandbox node.",
+  "synthetic_data_only": true
+}

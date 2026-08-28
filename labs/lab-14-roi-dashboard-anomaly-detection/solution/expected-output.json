@@ -1,11 +1,22 @@
 {
   "lab": 14,
-  "status": "PASS",
   "criteria": [
     "K2",
     "K4",
     "A3"
   ],
+  "terminal_node": "Analyst Review",
+  "evidence_file": "lab-14-evidence.json",
+  "representative_output": {
+    "period": "2026-W37",
+    "channel": "LinkedIn",
+    "spend": 1550,
+    "customers": 6,
+    "revenue": 9000,
+    "gross_margin": 0.68,
+    "baseline_cv": 0.041,
+    "current_cv": 0.055
+  },
   "metric": "ROI = (revenue\u00d7gross_margin\u2212spend)/spend; lift = (current\u2212baseline)/baseline",
   "acceptance": "Dashboard metrics match the formulas; anomalies include volume, baseline, guardrail status and analyst decision.",
   "synthetic_data_only": true

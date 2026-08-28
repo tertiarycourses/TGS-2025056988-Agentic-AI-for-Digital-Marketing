@@ -14,12 +14,12 @@
     },
     {
       "parameters": {
-        "jsCode": "return [{\"json\": {\"event_id\": \"EVT-001\", \"campaign_id\": \"CMP-NS-001\", \"asset_id\": \"AST-002\", \"channel\": \"linkedin\", \"event\": \"click\", \"event_time\": \"2026-09-11T10:00:00+08:00\", \"value_sgd\": 0, \"cost_sgd\": 18.5, \"source\": \"mock-api\"}}, {\"json\": {\"event_id\": \"EVT-002\", \"campaign_id\": \"CMP-NS-001\", \"asset_id\": \"AST-001\", \"channel\": \"website\", \"event\": \"qualified_lead\", \"event_time\": \"2026-09-11T10:04:00+08:00\", \"value_sgd\": 0, \"cost_sgd\": 0, \"source\": \"mock-crm\"}}];"
+        "jsCode": "return [{\"json\": {\"event_id\": \"EVT-001\", \"campaign_id\": \"CMP-NS-001\", \"asset_id\": \"AST-002\", \"channel\": \"linkedin\", \"event\": \"click\", \"event_time\": \"2026-09-11T10:00:00+08:00\", \"value_sgd\": 0, \"cost_sgd\": 18.5, \"source\": \"socialpost-result-fixture\"}}, {\"json\": {\"event_id\": \"EVT-002\", \"campaign_id\": \"\", \"asset_id\": \"AST-001\", \"channel\": \"website\", \"event\": \"qualified_lead\", \"event_time\": \"2026-09-11T10:04:00+08:00\", \"value_sgd\": 0, \"cost_sgd\": 0, \"source\": \"mock-crm-invalid\"}}];"
       },
       "id": "n13-02",
       "name": "Mock Channel Events",
       "type": "n8n-nodes-base.code",
-      "typeVersion": 1,
+      "typeVersion": 2,
       "position": [
         500,
         220
@@ -27,70 +27,114 @@
     },
     {
       "parameters": {
-        "jsCode": "const seen=new Set(); return items.map(x=>{x.json.valid=Boolean(x.json.event_id&&x.json.campaign_id&&x.json.event_time); x.json.duplicate=seen.has(x.json.event_id); seen.add(x.json.event_id); return x;}).filter(x=>!x.json.duplicate);"
+        "jsCode": "for (const x of items) { const j=x.json; j.event_time=new Date(j.event_time).toISOString(); j.valid=Boolean(j.event_id&&j.campaign_id&&j.asset_id&&j.channel&&j.event&&!Number.isNaN(Date.parse(j.event_time))); j.validation_errors=[]; for (const k of ['event_id','campaign_id','asset_id','channel','event','event_time']) if(!j[k]) j.validation_errors.push(k); } return items;"
       },
       "id": "n13-03",
       "name": "Normalise Schema",
       "type": "n8n-nodes-base.code",
-      "typeVersion": 1,
+      "typeVersion": 2,
       "position": [
         760,
         220
       ]
     },
     {
-      "parameters": {},
+      "parameters": {
+        "jsCode": "const seen=new Set(); for (const x of items) { x.json.duplicate=seen.has(x.json.event_id); seen.add(x.json.event_id); } return items;"
+      },
       "id": "n13-04",
       "name": "Deduplicate Event IDs",
-      "type": "n8n-nodes-base.noOp",
-      "typeVersion": 1,
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
       "position": [
         1020,
         220
       ]
     },
     {
-      "parameters": {},
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "n13-05-condition",
+              "leftValue": "={{ $json.valid === true && $json.duplicate === false }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
       "id": "n13-05",
-      "name": "Join Campaign Map",
-      "type": "n8n-nodes-base.noOp",
-      "typeVersion": 1,
+      "name": "Valid Event?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
       "position": [
-        240,
-        410
+        1280,
+        220
       ]
     },
     {
-      "parameters": {},
+      "parameters": {
+        "jsCode": "for (const x of items) { x.json.campaign_joined=x.json.campaign_id==='CMP-NS-001'; } return items;"
+      },
       "id": "n13-06",
-      "name": "Attribution Rules",
-      "type": "n8n-nodes-base.noOp",
-      "typeVersion": 1,
+      "name": "Join Campaign Map",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
       "position": [
-        500,
-        410
+        1540,
+        140
       ]
     },
     {
-      "parameters": {},
+      "parameters": {
+        "jsCode": "for (const x of items) { x.json.attribution_model='last eligible touch fixture'; x.json.attributed=x.json.campaign_joined===true; x.json.limitation='Training fixture derived from retained platform result'; } return items;"
+      },
       "id": "n13-07",
-      "name": "Performance Facts",
-      "type": "n8n-nodes-base.noOp",
-      "typeVersion": 1,
+      "name": "Attribution Rules",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
       "position": [
-        760,
-        410
+        1800,
+        140
       ]
     },
     {
-      "parameters": {},
+      "parameters": {
+        "jsCode": "for (const x of items) { x.json.terminal_node='Performance Facts'; x.json.fact_status='ACCEPTED'; } return items;"
+      },
       "id": "n13-08",
-      "name": "Quarantine",
-      "type": "n8n-nodes-base.noOp",
-      "typeVersion": 1,
+      "name": "Performance Facts",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
       "position": [
-        1020,
-        410
+        2060,
+        140
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "for (const x of items) { x.json.terminal_node='Quarantine'; x.json.fact_status='QUARANTINED'; x.json.quarantine_reason=x.json.duplicate?'DUPLICATE_EVENT':'INVALID_EVENT'; } return items;"
+      },
+      "id": "n13-09",
+      "name": "Quarantine",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1540,
+        340
       ]
     },
     {
@@ -148,7 +192,25 @@
       "main": [
         [
           {
+            "node": "Valid Event?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Valid Event?": {
+      "main": [
+        [
+          {
             "node": "Join Campaign Map",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Quarantine",
             "type": "main",
             "index": 0
           }
@@ -176,17 +238,6 @@
           }
         ]
       ]
-    },
-    "Performance Facts": {
-      "main": [
-        [
-          {
-            "node": "Quarantine",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
     }
   },
   "active": false,
@@ -194,13 +245,9 @@
     "executionOrder": "v1",
     "saveManualExecutions": true
   },
-  "versionId": "5cc4d3578aaf2dc1a78182875f410673",
+  "versionId": "12520ea53ef41cee3eecd2e14dda27d8",
   "meta": {
     "templateCredsSetupCompleted": false
   },
-  "tags": [
-    "TGS-2025056988",
-    "digital-marketing",
-    "human-oversight"
-  ]
+  "tags": []
 }

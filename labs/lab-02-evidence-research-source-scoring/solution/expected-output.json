@@ -1,9 +1,20 @@
 {
   "lab": 2,
-  "status": "PASS",
   "criteria": [
     "K2"
   ],
+  "terminal_node": "Research Queue",
+  "evidence_file": "lab-02-evidence.json",
+  "representative_output": {
+    "source_id": "SRC-001",
+    "publisher": "IMDA",
+    "url": "https://www.imda.gov.sg/",
+    "published_date": "2026-07-15",
+    "claim": "SMEs prioritise measurable digital growth",
+    "relevance": 0.88,
+    "reliability": 0.95,
+    "recency": 0.92
+  },
   "metric": "evidence_score = relevance \u00d7 reliability \u00d7 recency",
   "acceptance": "Every accepted claim retains source_id, URL, published date and evidence_score; no rejected row reaches synthesis.",
   "synthetic_data_only": true

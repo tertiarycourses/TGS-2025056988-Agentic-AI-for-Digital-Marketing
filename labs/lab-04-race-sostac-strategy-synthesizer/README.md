@@ -1,7 +1,7 @@
 # Lab 04 — RACE/SOSTAC Strategy Synthesizer
 
 Course: Agentic AI for Digital Marketing (TGS-2025056988)  
-Version: v2.0  
+Version: v2.1  
 Criteria: K1, K3, A4
 
 ## Objective
@@ -11,6 +11,7 @@ Map approved opportunities into an integrated strategy and control plan.
 ## Connected campaign stage
 
 This lab continues the synthetic **Northstar Launch** campaign. Its output is designed to feed the next lab. Keep all supplied IDs unchanged so lineage remains visible end to end.
+
 
 ## What you will build
 
@@ -57,7 +58,7 @@ Metric: `alignment_rate = decisions_with_objective_and_owner / total_decisions`
 
 Risk: Channel tactics can drift from the business objective.
 
-Keep the workflow inactive while learning. Credentialed publishing nodes are disabled and point to a non-routable example domain. Use dry-run output unless a trainer explicitly authorises a sandbox social account.
+Keep the workflow inactive while learning. Credentialed publishing nodes remain disabled. Use dry-run output unless a trainer explicitly authorises a sandbox social account.
 
 ## Clean-up
 

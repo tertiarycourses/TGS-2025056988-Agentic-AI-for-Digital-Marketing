@@ -1,11 +1,30 @@
 {
   "lab": 8,
-  "status": "PASS",
   "criteria": [
     "K5",
     "A5"
   ],
+  "terminal_node": "Content Queue",
+  "evidence_file": "generated-assets.json",
+  "representative_output": {
+    "asset_id": "AST-002",
+    "brief_id": "BRF-001",
+    "evidence_ids": "SRC-001|SRC-002",
+    "channel": "linkedin",
+    "media_type": "text",
+    "title": "Prove campaign contribution",
+    "description": "Evidence-led benchmark for SG marketing teams",
+    "caption": "Read the benchmark",
+    "media_path": "",
+    "user": "northstar_training",
+    "max_chars": 1300,
+    "message_angle": "prove contribution",
+    "cta": "Read benchmark",
+    "status": "SOCIALPOST_READY",
+    "api_path": "/api/upload_text",
+    "channel_fit": true
+  },
   "metric": "channel_fit = passed_length AND required_fields AND approved_claims_only",
-  "acceptance": "One approved brief produces distinct channel assets; every asset retains brief_id, evidence_ids and validation status.",
+  "acceptance": "One approved brief produces distinct channel assets; every social asset is endpoint-ready and retains brief_id, evidence_ids and validation status.",
   "synthetic_data_only": true
 }

@@ -1,10 +1,22 @@
 {
   "lab": 3,
-  "status": "PASS",
   "criteria": [
     "K1",
     "K2"
   ],
+  "terminal_node": "Opportunity Backlog",
+  "evidence_file": "lab-03-evidence.json",
+  "representative_output": {
+    "signal_id": "SIG-001",
+    "segment": "SG SME marketing lead",
+    "job": "Prove pipeline contribution",
+    "pain": "Disconnected channel reports",
+    "trigger": "Quarterly planning",
+    "evidence_ids": "SRC-001|SRC-002",
+    "impact": 5,
+    "confidence": 4,
+    "effort": 2
+  },
   "metric": "ICE = impact \u00d7 confidence / effort",
   "acceptance": "Every opportunity has evidence_ids, an ICE score and explicit supported status before strategy synthesis.",
   "synthetic_data_only": true

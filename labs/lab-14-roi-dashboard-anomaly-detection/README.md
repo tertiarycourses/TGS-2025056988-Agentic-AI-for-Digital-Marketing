@@ -1,7 +1,7 @@
 # Lab 14 — ROI Dashboard & Anomaly Detection
 
 Course: Agentic AI for Digital Marketing (TGS-2025056988)  
-Version: v2.0  
+Version: v2.1  
 Criteria: K2, K4, A3
 
 ## Objective
@@ -11,6 +11,7 @@ Calculate channel economics and surface statistically meaningful changes.
 ## Connected campaign stage
 
 This lab continues the synthetic **Northstar Launch** campaign. Its output is designed to feed the next lab. Keep all supplied IDs unchanged so lineage remains visible end to end.
+
 
 ## What you will build
 
@@ -58,7 +59,7 @@ Metric: `ROI = (revenue×gross_margin−spend)/spend; lift = (current−baseline
 
 Risk: Small samples can produce dramatic but unreliable lift.
 
-Keep the workflow inactive while learning. Credentialed publishing nodes are disabled and point to a non-routable example domain. Use dry-run output unless a trainer explicitly authorises a sandbox social account.
+Keep the workflow inactive while learning. Credentialed publishing nodes remain disabled. Use dry-run output unless a trainer explicitly authorises a sandbox social account.
 
 ## Clean-up
 

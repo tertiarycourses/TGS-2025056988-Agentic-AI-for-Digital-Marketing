@@ -1,11 +1,27 @@
 {
   "lab": 13,
-  "status": "PASS",
   "criteria": [
     "K2",
     "K4",
     "A3"
   ],
+  "terminal_node": "Performance Facts",
+  "evidence_file": "performance-facts.csv",
+  "representative_output": {
+    "event_id": "EVT-001",
+    "campaign_id": "CMP-NS-001",
+    "asset_id": "AST-002",
+    "channel": "linkedin",
+    "event": "click",
+    "event_time": "2026-09-11T10:00:00+08:00",
+    "value_sgd": 0,
+    "cost_sgd": 18.5,
+    "source": "socialpost-result-fixture",
+    "valid": true,
+    "duplicate": false,
+    "terminal_node": "Performance Facts",
+    "fact_status": "ACCEPTED"
+  },
   "metric": "data_quality = valid_unique_events / received_events",
   "acceptance": "All facts have unique event_id, valid campaign_id, normalised time and an explicit attribution rule or quarantine reason.",
   "synthetic_data_only": true
